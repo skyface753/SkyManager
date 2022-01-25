@@ -1,0 +1,59 @@
+version: "3.2"
+services:
+  skymanager-backend:
+    image: skyface753/skymanager-backend
+    ports:
+      - 8452:80
+    environment:
+      DB_HOST: db                       
+      DB_USER: userSkyManager
+      DB_PASSWORD: "TestDBPass123"
+      DB_NAME: SkyManager
+      MASTER_KEY: "MasterKeyTestPass123!!!"
+      FRONTEND_URL: "http://skymanager.skyface.de:8091"
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+
+  skymanager-frontend:
+    image: skyface753/skymanager
+    ports:
+      - 8091:80
+    environment:
+      BACKEND_URL: "https://skymanager.skyface.de"
+    
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./DB-Data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: exampleeee
+      MYSQL_DATABASE: SkyManager
+      MYSQL_USER: userSkyManager
+      MYSQL_PASSWORD: "TestDBPass123"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-uroot" , "-pexampleeee" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  db-cron-backup:
+    image: fradelg/mysql-cron-backup
+    restart: always
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASS: exampleeee
+      INIT_BACKUP: "1"
+      MAX_BACKUPS: 5
+      TZ: "Europe/Berlin"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backup:/backup
+
+
+  
+

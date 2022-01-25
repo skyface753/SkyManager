@@ -1,0 +1,46 @@
+version: "3.2"
+services:
+  prodtest-backend: # PRODTEST with Building the Image
+    build: ./SkyManager-Backend/
+    ports:
+      - 8451:80
+    environment:
+      DB_HOST: db
+      DB_USER: userSkyManager
+      DB_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
+      DB_NAME: SkyManager
+      MASTER_KEY: "MasterKeyTest1234!"  # Enrcypt for Customer Passes
+      MODE: TEST   # SQL Output & More Test-Datas
+      FRONTEND_URL: "http://localhost:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./skymanager_flutter/
+    ports:
+      - 80:80
+    environment:
+      BACKEND_URL: "http://localhost:8451"
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: SkyManager
+      MYSQL_USER: userSkyManager
+      MYSQL_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-uroot" , "-pexample" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      PMA_HOST: db
+    ports:
+      - 8452:80
+    restart: always
+

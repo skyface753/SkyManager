@@ -1,0 +1,65 @@
+version: "3.2"
+services:
+  DEBUG-Backend:   # DEBUG
+    image: skyface753/nodejsrunner
+    ports:
+      - 8451:80
+    volumes:
+      - ./SkyManager-Backend/:/usr/src/app
+    environment:
+      DB_HOST: db
+      DB_USER: userSkyManager
+      DB_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
+      DB_NAME: SkyManager
+      MASTER_KEY: "MasterKeyTest1234!"  # Enrcypt for Customer Passes
+      # IMAP_HOST: imap.gmail.com
+      # IMAP_PORT: 993
+      # IMAP_USER: "vuhvejbfj"
+      # IMAP_PASSWORD: "fgbhjnkm"
+      # IMAP_SECURE: 1
+      MODE: TEST   # SQL Output
+      FRONTEND_URL: "http://skymanager.skyface.de:8091"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: SkyManager
+      MYSQL_USER: userSkyManager
+      MYSQL_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-uroot" , "-pexample" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      PMA_HOST: db
+    ports:
+      - 8084:80
+    restart: always
+
+  # mongodb:
+  #   image: mongo
+  #   restart: always
+  #   volumes:
+  #     - ./MongoData:/data/db
+  #   ports:
+  #     - 27017:27017
+
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
+  #     ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/

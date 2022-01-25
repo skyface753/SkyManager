@@ -1,0 +1,46 @@
+{
+    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // {
+            
+        //         "name": "Launch via npm",
+        //         "type": "node",
+        //         "request": "launch",
+        //         "cwd": "${workspaceFolder}/SkyManager-Backend",
+        //         "runtimeExecutable": "npm",
+        //         "runtimeArgs": ["run-script", "debug"],
+        //         "env": {
+        //             "DB_HOST": "127.0.0.1",
+        //             "DB_USER": "userSkyManager",
+        //             "DB_PASSWORD": "T%8C=91F+4SW!Fg5U.OM",
+        //             "DB_NAME": "SkyManager",
+        //             "MASTER_KEY": "MasterKeyTest1234!",
+        //             "IMAP_HOST": "imap.gmail.com",
+        //             "IMAP_PORT": "993",
+        //             "IMAP_USER": "vuhvejbfj",
+        //             "IMAP_PASSWORD": "fgbhjnkm",
+        //             "IMAP_SECURE": "1",
+        //             "MODE": "TEST",
+        //             "FRONTEND_URL": "http://skymanager.skyface.de:8091"
+        //         }
+              
+        // },
+        {
+            "name": "skymanager_flutter",
+            "cwd": "skymanager_flutter",
+            "request": "launch",
+            "type": "dart",
+            "args": ["-d", "Chrome"]
+        },
+        {
+            "name": "skymanager_flutter (profile mode)",
+            "cwd": "skymanager_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        }
+    ]
+}

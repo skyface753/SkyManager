@@ -1,0 +1,5 @@
+{
+    "git.ignoreLimitWarning": true,
+    "gitlab.ignoreCertificateErrors": true,
+    "jshint.enable" : false
+}
