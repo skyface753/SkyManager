@@ -1,3 +1,7 @@
+Backend:
+![Docker Automated build](https://img.shields.io/docker/automated/skyface753/skymanager-backend)
+Frontend:
+![Docker Automated build](https://img.shields.io/docker/automated/skyface753/skymanager)
 ## SkyManager-Backend
 
     DB_HOST || 'db',
