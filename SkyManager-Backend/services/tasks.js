@@ -81,7 +81,20 @@ let taskService = {
             "Result": result
         }
         res.json(response);
+    },
+    getTaskByID: async (req, res) => {
+        var taskID = req.body.taskID;
+        var result = await db.query("SELECT `tasks`.`ID`, `tasks`.`Titel`, `tasks`.`Beschreibung`, `tasks`.`DateTime`, `tasks`.`ticket_fk`, `tasks`.`isCompleted` FROM `tasks` WHERE `ID` = '" + taskID + "';");
+        var tastUsers = await db.query("SELECT `users_tasks`.`User_FK` FROM `users_tasks` INNER JOIN `tasks` ON `users_tasks`.`Task_FK` = `tasks`.`ID` WHERE `tasks`.`ID` = '" + taskID + "';");
+        let response = {
+            "ID": taskID,
+            "Result": result,
+            "Users": tastUsers
+        }
+        res.json(response);
     }
+    
+
 }
 
 module.exports = taskService;

@@ -60,6 +60,7 @@ router.post('/tasks/create', TaskService.createTask);
 router.post('/tasks/delete', TaskService.deleteTask);
 router.post('/tasks/complete', TaskService.completeTask);
 router.post('/tasks/reopen', TaskService.reopenTask);
+router.post('/tasks/taskByID', TaskService.getTaskByID);
 
 const WikiService = require('../services/wiki');
 router.post('/wiki', WikiService.getWiki);
