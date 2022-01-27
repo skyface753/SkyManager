@@ -1,7 +1,55 @@
-Backend:
-![Docker Automated build](https://img.shields.io/docker/automated/skyface753/skymanager-backend)
-Frontend:
-![Docker Automated build](https://img.shields.io/docker/automated/skyface753/skymanager)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-backend?label=docker%20build%20backend)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=docker%20build%20frontend)
+
+# Setup
+```yaml
+version: "3.2"
+services:
+  skymanager-backend:
+    image: skyface753/skymanager-backend
+    ports:
+      - 8452:80
+    environment:
+      DB_HOST: db                       
+      DB_USER: userSkyManager
+      DB_PASSWORD: "DbPassword"
+      DB_NAME: SkyManager
+      MASTER_KEY: "MasterKey"
+      FRONTEND_URL: "http://skymanager.skyface.de:8091"
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+
+  skymanager-frontend:
+    image: skyface753/skymanager
+    ports:
+      - 8091:80
+    environment:
+      BACKEND_URL: "https://skymanager.skyface.de:8452"
+    
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./DB-Data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: exampleeee
+      MYSQL_DATABASE: SkyManager
+      MYSQL_USER: userSkyManager
+      MYSQL_PASSWORD: "DbPassword"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-uroot" , "-pDbPassword" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+```
+
+
+  
+
+
+
 ## SkyManager-Backend
 
     DB_HOST || 'db',
@@ -34,6 +82,10 @@ MASTER_KEY ist to encrypt the database.
 ## First Login
 Username:   admin
 Password:   SkyManager
+
+## Datas
+db: /var/lib/mysql
+Backend: /usr/src/app/uploads
 
 
 # Development
