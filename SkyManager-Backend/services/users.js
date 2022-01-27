@@ -21,7 +21,7 @@ let userService = {
         res.json(users);
     },
     changePassword: async (req, res) => {
-        if(process.end.MODE == "DEMO"){
+        if(process.env.MODE == "DEMO"){
             res.sendStatus(403);
             return;
         }

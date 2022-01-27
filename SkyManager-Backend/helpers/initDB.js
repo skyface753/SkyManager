@@ -21,7 +21,7 @@ const createWiki = "CREATE TABLE `wiki` ( `ID` int(11) NOT NULL, `Titel` varchar
 const createFirstWiki = "INSERT INTO `wiki` (`ID`, `Titel`, `Text`) VALUES (1, 'First Wiki', '# Welcome');"
 const createNotifications = "CREATE TABLE `notifications` ( `ID` int(11) NOT NULL, `User_FK` varchar(50) NOT NULL, `Ticket_FK` int(11) NOT NULL, `Text` longtext NOT NULL, `DateTime` datetime NOT NULL, `isRead` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
 const createFirstNotifications = "INSERT INTO `notifications` (`ID`, `User_FK`, `Ticket_FK`, `Text`, `DateTime`, `isRead`) VALUES (1, 'admin', 10000, 'Admin worked /*hard*/', CURRENT_TIMESTAMP(), 0);"
-const createDocu = "CREATE TABLE `docu` ( `name` varchar(250) NOT NULL, `path` varchar(250) NOT NULL, `type` varchar(50) NOT NULL, `size` int(11) NOT NULL, `user_fk` varchar(50) NOT NULL, `customer_fk` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+const createDocu = "CREATE TABLE `docu` (`ID` int(11) NOT NULL, `name` varchar(250) NOT NULL, `path` varchar(250) NOT NULL, `type` varchar(50) NOT NULL, `size` int(11) NOT NULL, `user_fk` varchar(50) NOT NULL, `customer_fk` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
 const TableSQL = createKunden + createFirstKunde + createPasses + createRoles + createFirstRoles + createEintraege + createFirstEintraege + createTickets + createFirstTicket + createZustaende + createFirstZustaende + createUser + createFirstUser + createTaks + createFirstTask + createUsersTasks + createFirstUsersTasks + createWiki + createFirstWiki + createNotifications + createFirstNotifications + createDocu;
 // INDIZIES 7
 const indKunden = "ALTER TABLE `kunden` ADD PRIMARY KEY (`ID`);"
@@ -35,7 +35,8 @@ const indTasks = "ALTER TABLE `tasks` ADD PRIMARY KEY (`ID`), ADD KEY `owner` (`
 const indUsersTasks = "ALTER TABLE `users_tasks` ADD PRIMARY KEY (`ID`), ADD KEY `User_FK` (`User_FK`), ADD KEY `Task_FK` (`Task_FK`);"
 const indWiki = "ALTER TABLE `wiki` ADD PRIMARY KEY (`ID`);"
 const indNotifications = "ALTER TABLE `notifications` ADD PRIMARY KEY (`ID`), ADD KEY `User_FK` (`User_FK`), ADD KEY `Ticket_FK` (`Ticket_FK`);"
-const indSQL = indKunden + indPasses + indRoles + indEintraege + indTickets + indZustaende + indUser + indTasks + indUsersTasks + indWiki + indNotifications;
+const indDocu = "ALTER TABLE `docu` ADD PRIMARY KEY (`ID`), ADD KEY `user_fk` (`user_fk`), ADD KEY `customer_fk` (`customer_fk`);"
+const indSQL = indKunden + indPasses + indRoles + indEintraege + indTickets + indZustaende + indUser + indTasks + indUsersTasks + indWiki + indNotifications + indDocu;
 // Auto Incerement 5
 const aiKunden = "ALTER TABLE `kunden` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;"
 const aiPasses = "ALTER TABLE `kunden_passwoerter` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;"
@@ -46,7 +47,8 @@ const aiTasks = "ALTER TABLE `tasks` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT
 const aiUsersTasks = "ALTER TABLE `users_tasks` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;"
 const aiWiki = "ALTER TABLE `wiki` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;"
 const aiNotifications = "ALTER TABLE `notifications` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;"
-const aiSQL = aiKunden + aiPasses + aiEintraege + aiTickets + aiZustaende + aiTasks + aiUsersTasks + aiWiki + aiNotifications;
+const aiDocu = "ALTER TABLE `docu` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;"
+const aiSQL = aiKunden + aiPasses + aiEintraege + aiTickets + aiZustaende + aiTasks + aiUsersTasks + aiWiki + aiNotifications + aiDocu;
 // Constraints (FK) 4
 const fkPasses = "ALTER TABLE `kunden_passwoerter` ADD CONSTRAINT `kunden_passwoerter_ibfk_1` FOREIGN KEY (`Kunden_FK`) REFERENCES `kunden` (`ID`);"
 const fkEintraege = "ALTER TABLE `ticket_eintraege` ADD CONSTRAINT `ticket_eintraege_ibfk_1` FOREIGN KEY (`Ticket_FK`) REFERENCES `ticket_tickets` (`ID`), ADD CONSTRAINT `ticket_eintraege_ibfk_2` FOREIGN KEY (`User_FK`) REFERENCES `user` (`Name`);"
@@ -56,6 +58,7 @@ const fkTasks = "ALTER TABLE `tasks` ADD CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (
 const fkUsersTasks = "ALTER TABLE `users_tasks` ADD CONSTRAINT `users_tasks_ibfk_1` FOREIGN KEY (`User_FK`) REFERENCES `user` (`Name`), ADD CONSTRAINT `users_tasks_ibfk_2` FOREIGN KEY (`Task_FK`) REFERENCES `tasks` (`ID`);"
 const fkNotifications = "ALTER TABLE `notifications` ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`User_FK`) REFERENCES `user` (`Name`), ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`Ticket_FK`) REFERENCES `ticket_tickets` (`ID`);"
 const fkDocu = "ALTER TABLE `docu` ADD CONSTRAINT `docu_ibfk_1` FOREIGN KEY (`user_fk`) REFERENCES `user` (`Name`), ADD CONSTRAINT `docu_obfk_2` FOREIGN KEY (`customer_fk`) REFERENCES `kunden` (`ID`);"
+
 const fkSQL = fkPasses + fkEintraege + fkTickets + fkUser + fkTasks + fkUsersTasks + fkNotifications + fkDocu;
 const InitDB = TableSQL + indSQL + aiSQL + fkSQL;
 
