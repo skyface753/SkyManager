@@ -93,35 +93,17 @@ app.post('/login', UserService.login);
 
 // Middleware to check if user is logged in
 app.use(function (req, res, next) {
-    console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
+    if(process.env.mode == "TEST")
+    {
+        console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
+    }   
     if(UserService.isLoggedIn(req, res)){
         console.log("User is authenticatet")
         next();
     }else{
-        if(process.env.MODE == "TEST"){
-            const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
-            const strauth = Buffer.from(b64auth, 'base64').toString()
-            const splitIndex = strauth.indexOf(':')
-            const username = strauth.substring(0, splitIndex)
-            const password = strauth.substring(splitIndex + 1)
-            if(username == "Skyface" && password == "SkyManagerAPITEST"){
-                console.log("-------------BYPASS---------------");
-                const token = jwt.sign({ username: "admin", role_fk: 1 }, jwtKey, {
-                    algorithm: "HS256",
-                    expiresIn: jwtExpirySeconds,
-                })
-                req.body.token = token;
-                next();
-            }else{
-                res.status(401);
-                console.log("Auth error1")
-                res.send("Auth Expired").end();
-            }
-        }else{
-            res.status(401);
-            console.log("Auth error2")
-            res.send("Auth Expired").end();
-        }
+        res.status(401);
+        console.log("Auth Expired")
+        res.send("Auth Expired").end();
     }
 })
 
@@ -190,7 +172,9 @@ app.use('/', routes);
 
 // Catch all exceptions 
 process.on('uncaughtException', function (err) {
-    
+    console.log("-----------Begin Uncaught Exception---------");
+    console.log("Uncaught Exception: " + err);
+    console.log("-----------End Uncaught Exception---------");
   });
 
 
