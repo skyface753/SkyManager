@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "debug": "node server.js"
+    "debug": "node server.js",
+    "test": "echo \"Test: No Tests\" &amp;&amp; exit 0"
   },
   "dependencies": {
     "express": "^4.16.1",
