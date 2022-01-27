@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   skymanager-backend:
-    image: skyface753/skymanager-backend
+    image: skyface753/skymanager
     ports:
       - 8452:80
     environment:
@@ -17,7 +17,7 @@ services:
         condition: service_healthy
 
   skymanager-frontend:
-    image: skyface753/skymanager
+    image: skyface753/skymanager-frontend
     ports:
       - 8091:80
     environment:

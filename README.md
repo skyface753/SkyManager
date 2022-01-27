@@ -1,12 +1,12 @@
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-backend?label=docker%20build%20backend)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=docker%20build%20frontend)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=docker%20build%20backend)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-frontend?label=docker%20build%20frontend)
 
 # Setup
 ```yaml
 version: "3.2"
 services:
   skymanager-backend:
-    image: skyface753/skymanager-backend
+    image: skyface753/skymanager
     ports:
       - 8452:80
     environment:
@@ -22,7 +22,7 @@ services:
         condition: service_healthy
 
   skymanager-frontend:
-    image: skyface753/skymanager
+    image: skyface753/skymanager-frontend
     ports:
       - 8091:80
     environment:
@@ -76,15 +76,15 @@ services:
     BACKEND_URL || null     // User wont be asked for the url (Just asked for Username and Password)
 
 ## Encryption
-MASTER_KEY ist to encrypt the database. 
+MASTER_KEY ist to encrypt the database. <br>
 <span style="color:red">*DONT REPLACE THIS KEY WHEN ALREADY SET*</span>.
 
 ## First Login
-Username:   admin
+Username:   admin <br>
 Password:   SkyManager
 
 ## Datas
-db: /var/lib/mysql
+db: /var/lib/mysql <br>
 Backend: /usr/src/app/uploads
 
 
@@ -93,15 +93,15 @@ Backend: /usr/src/app/uploads
 docker-compose -f docker-compose-debug.yml up
 
 ## Test
-docker-compose -f docker-compose-test.yml build
+docker-compose -f docker-compose-test.yml build <br>
 docker-compose -f docker-compose-test.yml up
 
 ## Prod
-/bin/bash "Build and Push.sh"
+/bin/bash "Build and Push.sh" <br>
 docker-compose -f docker-compose up
 
 # DEMO
-demo.skymanager.net (Frontend)
+demo.skymanager.net (Frontend) <br>
 demo-backend.skymanager.net (Backend)
 
 ## Recreate the Backend and the Database for Demo every 10 Minutes:
