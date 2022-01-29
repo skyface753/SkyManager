@@ -149,16 +149,21 @@ app.post('/upload', upload.single('myFile'), async(req, res, next) => {
 
 const unlinkAsync = promisify(fs.unlink)
 
-   app.post('/image/delete',async(req, res)=>{
-        var docID = req.body.docID;
-        var docPath = await db.query("SELECT path FROM docu WHERE id = ?", [docID]);
-        docPath = docPath[0].path;
-        await db.query("DELETE FROM docu WHERE ID = ?", [docID]);
-        await unlinkAsync(docPath);
-        res.send("File Deleted");
-    
-   }   
-    )
+app.post('/image/delete',async(req, res)=>{
+    var docID = req.body.docID;
+    var docPath = await db.query("SELECT path, name FROM docu WHERE id = ?", [docID]);
+    var docName = docPath[0].name;
+    docPath = docPath[0].path;
+    fs.rename(docPath, './uploads/deleted/' + docName, function (err) {
+        if (err) throw err;
+        console.log('File Renamed');
+    }
+        );
+    await db.query("DELETE FROM docu WHERE ID = ?", [docID]);
+    // await unlinkAsync(docPath);
+    res.send("File Deleted");
+
+})
 
   
 
