@@ -12,11 +12,6 @@ services:
       DB_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
       DB_NAME: SkyManager
       MASTER_KEY: "MasterKeyTest1234!"  # Enrcypt for Customer Passes
-      # IMAP_HOST: imap.gmail.com
-      # IMAP_PORT: 993
-      # IMAP_USER: "vuhvejbfj"
-      # IMAP_PASSWORD: "fgbhjnkm"
-      # IMAP_SECURE: 1
       MODE: TEST   # SQL Output
       FRONTEND_URL: "http://skymanager.skyface.de:8091"
     depends_on:

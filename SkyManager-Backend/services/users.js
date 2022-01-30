@@ -10,6 +10,9 @@ const jwtKeyGenerator = require('./jwtKey');
 const jwtKey = jwtKeyGenerator.jwtKey;
 console.log("Key in User: " + jwtKey);
 
+const config = require('../config');
+const sendMailEnabled = config.smtpMail.host ? true : false;
+
 // 400 Bad Request - Invalid Input  // Logout
 // 401 Unauthorized (Token Expired) //Retry Login
 // 403 Forbidden (User is not an Admin)
@@ -129,11 +132,13 @@ let userService = {
                     res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 })
                     await db.query("UPDATE `user` SET `LastLogin_Date` = CURRENT_DATE(), `LastLogin_Time` = CURRENT_TIME() WHERE `user`.`Name` = '" + usernameReturn + "'");
                     console.log("Login Success");
+
                     var returnJson = {
                         token: token,
                         role_fk: role_fkReturn,
                         username: usernameReturn,
-                        email: emailReturn
+                        email: emailReturn,
+                        sendMailEnabled: sendMailEnabled,
                     }
                     res.send(returnJson);
                 }else{
