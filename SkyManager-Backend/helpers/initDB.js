@@ -98,7 +98,7 @@ function initDB(){
                     }
                 });
             }
-            for(k = 0; k < 10; k++){
+            for(k = 0; k < 100000; k++){
                 myCon.query("INSERT INTO `ticket_tickets` (`ID`, `Kunden_FK`, `Titel`, `Beschreibung`, `Zustand_FK`, `User_FK`) VALUES (NULL, 1, 'Test" + k + "', 'Beschreibung123', 1, 'admin');", function(err, results) {
                     if (err) throw err;
                     for (let index = 0; index < results.length; index++) {

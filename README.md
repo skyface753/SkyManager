@@ -4,20 +4,35 @@
 ![Titelbild](https://github.com/skyface753/SkyManager/blob/main/Images/Icons/SkyManager-Titelbild-Without-Background.png)
 
 # Setup
+
+## Setup
+1. Create docker-compose.yml file from below or Clone the Repo
+2. Change the environment variables in the docker-compose.yml file:
+   1. DB_USER
+   2. DB_PASSWORD
+   3. DB_NAME
+   4. <span style="color:red">MASTERKEY (Don't change these key) </span>
+   5. FRONTEND_URL (If you want to send Mails with Links to Tickets)
+   6. BACKEND_URL (Autofills the url in Browser)
+   7. MYSQL_ROOT_PASSWORD (in db Service and the Healthcheck)
+   8. MYSQL_DATABASE
+   9. MYSQL_USER
+   10. MYSQL_PASSWORD
+3.  Run "docker-compose up -d"
 ```yaml
 version: "3.2"
 services:
   skymanager-backend:
     image: skyface753/skymanager
     ports:
-      - 8452:80
+      - 8080:80
     environment:
-      DB_HOST: db                       
-      DB_USER: userSkyManager
-      DB_PASSWORD: "DbPassword"
-      DB_NAME: SkyManager
-      MASTER_KEY: "MasterKey"
-      FRONTEND_URL: "http://skymanager.skyface.de:8091"
+      DB_HOST: db                     
+      DB_USER: dbUser
+      DB_PASSWORD: dbPass
+      DB_NAME: dbName
+      MASTER_KEY: MasterKey
+      FRONTEND_URL: "http://<your IP or DNS>:80" #URL to the FrontEnd
     restart: always
     depends_on:
       db:
@@ -26,9 +41,9 @@ services:
   skymanager-frontend:
     image: skyface753/skymanager-frontend
     ports:
-      - 8091:80
+      - 80:80
     environment:
-      BACKEND_URL: "https://skymanager.skyface.de:8452"
+      BACKEND_URL: "https://<your IP or DNS:8080" #URL to the Backend
     
   db:
     image: mariadb
@@ -36,23 +51,21 @@ services:
     volumes:
       - ./DB-Data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: exampleeee
-      MYSQL_DATABASE: SkyManager
-      MYSQL_USER: userSkyManager
-      MYSQL_PASSWORD: "DbPassword"
+      MYSQL_ROOT_PASSWORD: dbRootPw
+      MYSQL_DATABASE: dbName
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbPass
     healthcheck:
-      test: ["CMD", "mysqladmin", "-uroot" , "-pDbPassword" ,"ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "-uroot" , "-pdbRootPw" ,"ping", "-h", "localhost"]
       timeout: 5s
       retries: 10
 
 ```
-
-
   
 
+# Environment Variables
 
-
-## SkyManager-Backend
+### SkyManager-Backend
 
     DB_HOST || 'db',
     DB_USER || 'userSkyManager',
