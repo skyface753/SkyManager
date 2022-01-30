@@ -124,4 +124,4 @@ demo-backend.skymanager.net (Backend)
 
 
 # Android
-![alt text](https://github.com/skyface753/SkyManager/blob/master/Images/Android-Screenshots/Login.jpg)
+<!-- ![alt text](https://github.com/skyface753/SkyManager/blob/master/Images/Android-Screenshots/Login.jpg) -->
