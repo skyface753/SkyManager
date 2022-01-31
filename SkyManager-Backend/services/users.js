@@ -8,7 +8,6 @@ const saltRounds = 10;
 
 const jwtKeyGenerator = require('./jwtKey');
 const jwtKey = jwtKeyGenerator.jwtKey;
-console.log("Key in User: " + jwtKey);
 
 const config = require('../config');
 const sendMailEnabled = config.smtpMail.host ? true : false;
@@ -31,9 +30,7 @@ let userService = {
         const { username, newPassword } = req.body;
         if(!isUserAnAdmin(req, res)){
             if(getUsernameFromToken(req, res) == username){
-                console.log("Current User isn't Admin but selfchange"); 
             }else{
-                console.log("Current User isn't Admin");
                 res.send("Current User isn't Admin");
                 return;
             }
@@ -111,7 +108,6 @@ let userService = {
         res.send("Changed Email for: " + username + " to: " + newMail);
     },
     login: async (req, res) => {    // Called in Server.js
-        console.log("Login User")
         let { username, password } = req.body;
         if(!username || !password){
             res.status(400).send("Username or Password not set");
@@ -131,7 +127,7 @@ let userService = {
                     res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
                     res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 })
                     await db.query("UPDATE `user` SET `LastLogin_Date` = CURRENT_DATE(), `LastLogin_Time` = CURRENT_TIME() WHERE `user`.`Name` = '" + usernameReturn + "'");
-                    console.log("Login Success");
+                    
 
                     var returnJson = {
                         token: token,
@@ -158,10 +154,8 @@ let userService = {
         var token = req.body.token;
         if(!token){
             if(req.cookies.token){
-                console.log("Token from Cookie");
                 token = req.cookies.token;
             }else{
-                console.log("No Token set");
                 return false;
             }
         }
@@ -180,7 +174,6 @@ let userService = {
             token: newToken,
         }
         res.send(returnJson);
-        console.log("Token Refreshed");
     },
     createUser: async (req, res) => {
         if(!isUserAnAdmin(req, res)){
@@ -201,18 +194,14 @@ let userService = {
         return isUserAnAdmin(req, res);
     },
     isLoggedIn: (req, res) => {
-        console.log("Check Login");
         var token = req.body.token;
         if(!token){
             if(req.cookies.token){
-                console.log("Token from Cookie");
                 token = req.cookies.token;
             }else{
                 if(req.headers.authorization){
                     token = req.headers.authorization;
-                    console.log("Token from Header:" + token);
                 }else{
-                console.log("No Token set");
                 return false;
                 }
             }
@@ -220,12 +209,9 @@ let userService = {
         var payload
         try{
             payload = jwt.verify(token, jwtKey);
-            console.log("Token verified")
         }catch (e){
-            console.log("Token error");
             return false;
         }
-        console.log("Logged in as: " + payload.username);
         return true;
     }
 }
@@ -239,14 +225,11 @@ function signToken(username, role_fk){
 }
 
 function isUserAnAdmin (req, res)  {
-    console.log("Check Admin");
     var token = req.body.token;
     if(!token){
         if(req.cookies.token){
-            console.log("Token from Cookie");
             token = req.cookies.token;
         }else{
-            console.log("No Token set");
             return false;
         }
     }
@@ -256,9 +239,7 @@ function isUserAnAdmin (req, res)  {
     }catch (e){
         return false;
     }
-    console.log("Logged in with Role '" + payload.role_fk + "': " + payload.username);
     if(payload.role_fk == "Admin"){
-        console.log("User is Admin")
         return true;
     }
     return false;      
@@ -268,14 +249,11 @@ function getUsernameFromToken(req, res){
     var token = req.body.token;
     if(!token){
         if(req.cookies.token){
-            console.log("Token from Cookie");
             token = req.cookies.token;
         }else{
             if(req.headers.authorization){
                 token = req.headers.authorization;
-                console.log("Token from Header:" + token);
             }else{
-                console.log("No Token set");
                 return false;
             }
         }

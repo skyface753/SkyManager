@@ -14,7 +14,6 @@ let WikiService = {
         res.json(wiki);
     },
     createWiki: async (req, res) => {
-        console.log("Create Wiki");
         let newWiki = req.body;
         await db.query("INSERT INTO `wiki` (`Titel`, `Text`) VALUES ('" + newWiki.title + "', '" + newWiki.text + "')");
         res.setHeader('Content-Type', 'application/json');

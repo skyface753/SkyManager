@@ -19,7 +19,6 @@ let EntryService = {
         let { ticketID, newEintrag, newArbeitszeit } = req.body;
         newArbeitszeit = newArbeitszeit.replace(/,/g, '.');
         var userID = await userService.getUsername(req, res);
-        console.log("Username for new Entry: " + userID);
         await db.query("INSERT INTO `ticket_eintraege` (`Ticket_FK`, `User_FK`, `Beschreibung`, `Arbeitszeit`, `Datum`, `Zeit`) VALUES ('" + ticketID + "', '" + userID + "', '" + newEintrag + "' , '" + newArbeitszeit + "', CURRENT_DATE(), CURRENT_TIME())");
         res.setHeader('Content-Type', 'application/json');
         res.send("Updated Ticket #" + ticketID);
@@ -46,7 +45,6 @@ let EntryService = {
         let { ticketID, newEintrag, newArbeitszeit, mailRecipient } = req.body;
         newArbeitszeit = newArbeitszeit.replace(/,/g, '.');
         var userID = await userService.getUsername(req);
-        console.log("Username for new Entry: " + userID);
         await db.query("INSERT INTO `ticket_eintraege` (`Ticket_FK`, `User_FK`, `Beschreibung`, `Arbeitszeit`, `Datum`, `Zeit`) VALUES ('" + ticketID + "', '" + userID + "', 'Mail an: " + mailRecipient + ": " + newEintrag + "' , '" + newArbeitszeit + "', CURRENT_DATE(), CURRENT_TIME())");
         MailService.sendMail(mailRecipient, "Mail from Ticket #" + ticketID, newEintrag, ticketID);
         res.setHeader('Content-Type', 'application/json');

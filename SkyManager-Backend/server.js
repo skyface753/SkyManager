@@ -10,7 +10,6 @@ const sendMail = require('./services/sendMail.js');
 
 const jwtKeyGenerator = require('./services/jwtKey');
 const jwtKey = jwtKeyGenerator.jwtKey;
-console.log("Key in Server: " + jwtKey);
 const jwtExpirySeconds = 3000
 
 
@@ -56,7 +55,6 @@ async function checkTheDatabase(){
     try{
 
         var result = await db.query("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'SkyManager' AND table_name = 'ticket_tickets');")
-        console.log("FromINIT: " + JSON.stringify(result));
         result = result[0]["EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'SkyManager' AND table_name = 'ticket_tickets')"]
         console.log("DB Check: " + result)
         if(result == 0){
@@ -98,11 +96,9 @@ app.use(function (req, res, next) {
         console.log(req.protocol + '://' + req.get('host') + req.originalUrl);
     }   
     if(UserService.isLoggedIn(req, res)){
-        console.log("User is authenticatet")
         next();
     }else{
         res.status(401);
-        console.log("Auth Expired")
         res.send("Auth Expired").end();
     }
 })
@@ -130,13 +126,8 @@ app.post('/upload', upload.single('myFile'), async(req, res, next) => {
     return next("hey error")
     }
 
-    console.log("FileName: " + file.filename);
-      
-      
     var username = await UserService.getUsername(req, res);
-    console.log("Username: " + username);
         db.query("INSERT INTO docs (name, path, uploadedName, type, size, user_fk, customer_fk) VALUES (?, ?, ?, ?, ?, ?, ?)", [file.originalname, file.path, file.filename,file.mimetype, file.size, username, req.body.customer_fk]);
-        console.log("File uploaded");
         res.status(200).send("File uploaded")
     
   })
@@ -158,7 +149,6 @@ app.post('/docs/delete',async(req, res)=>{
     var docPath = currentDoc[0].path;
     fs.rename(docPath, './uploads/deleted/' + newDocName, function (err) {
         if (err) throw err;
-        console.log('File Renamed');
     }
         );
     await db.query("DELETE FROM docs WHERE ID = ?", [docID]);
@@ -187,7 +177,7 @@ if(imapHost){
     }catch(e){
         console.log("Error while starting IMAP Mail Service: " + e);
     }
-}else{console.log("No IMAP Host")}
+}else{console.log("No IMAP Host - Diable IMAP Service")}
 
 const routes = require('./routes/routes');
 app.use('/', routes);

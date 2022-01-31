@@ -1,7 +1,6 @@
 const db = require('./db');
 const config = require('../config');
 const masterkey = config.masterkey.key;
-console.log("Masterkey: " + masterkey);
 let PassesService = {
     getPasses: async (req, res) => {
         var kundenID = req.body.kundenID;
