@@ -26,6 +26,8 @@ services:
     image: skyface753/skymanager
     ports:
       - 8080:80
+    volumes:
+      - ./uploads:/usr/src/app/uploads
     environment:
       DB_HOST: db                     
       DB_USER: dbUser
@@ -91,7 +93,7 @@ services:
     BACKEND_URL || null     // User wont be asked for the url (Just asked for Username and Password)
 
 ## Encryption
-MASTER_KEY ist to encrypt the database. <br>
+MASTER_KEY to encrypt the database. 
 <span style="color:red">*DONT REPLACE THIS KEY WHEN ALREADY SET*</span>.
 
 ## First Login
@@ -112,8 +114,7 @@ docker-compose -f docker-compose-test.yml build <br>
 docker-compose -f docker-compose-test.yml up
 
 ## Prod
-/bin/bash "Build and Push.sh" <br>
-docker-compose -f docker-compose up
+docker-compose -f docker-compose up -d
 
 # DEMO
 demo.skymanager.net (Frontend) <br>
@@ -121,6 +122,11 @@ demo-backend.skymanager.net (Backend)
 
 ## Recreate the Backend and the Database for Demo every 10 Minutes:
 (cd /home/skyface/SkyManager-Demo/; docker-compose stop skymanager-demo-backend; docker-compose stop db; rm -r DbDataNeu/*; docker-compose start db; sleep 10s; docker-compose start skymanager-demo-backend)
+
+# Feedback
+In App you can send Feedback to the Developer.
+"Feedback" to Sentry
+"Send Feedback" to wiredash
 
 
 # Android

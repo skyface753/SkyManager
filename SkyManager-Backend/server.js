@@ -129,18 +129,20 @@ app.post('/upload', upload.single('myFile'), async(req, res, next) => {
         error.httpStatusCode = 400
     return next("hey error")
     }
+
+    console.log("FileName: " + file.filename);
       
       
     var username = await UserService.getUsername(req, res);
     console.log("Username: " + username);
-        db.query("INSERT INTO docu (name, path, type, size, user_fk, customer_fk) VALUES (?, ?, ?, ?, ?, ?)", [file.originalname, file.path, file.mimetype, file.size, username, req.body.customer_fk]);
+        db.query("INSERT INTO docs (name, path, uploadedName, type, size, user_fk, customer_fk) VALUES (?, ?, ?, ?, ?, ?, ?)", [file.originalname, file.path, file.filename,file.mimetype, file.size, username, req.body.customer_fk]);
         console.log("File uploaded");
         res.status(200).send("File uploaded")
     
   })
   app.post('/image',async(req, res)=>{
       var customer_fk = req.body.customer_fk;
-    const docs = await db.query("SELECT * FROM docu WHERE customer_fk = ?", [customer_fk]);
+    const docs = await db.query("SELECT * FROM docs WHERE customer_fk = ?", [customer_fk]);
         res.send(docs);
     
    })
@@ -151,15 +153,15 @@ const unlinkAsync = promisify(fs.unlink)
 
 app.post('/image/delete',async(req, res)=>{
     var docID = req.body.docID;
-    var docPath = await db.query("SELECT path, name FROM docu WHERE id = ?", [docID]);
-    var docName = docPath[0].name;
-    docPath = docPath[0].path;
-    fs.rename(docPath, './uploads/deleted/' + docName, function (err) {
+    var currentDoc = await db.query("SELECT path, uploadedName FROM docs WHERE id = ?", [docID]);
+    var newDocName = currentDoc[0].uploadedName;
+    var docPath = currentDoc[0].path;
+    fs.rename(docPath, './uploads/deleted/' + newDocName, function (err) {
         if (err) throw err;
         console.log('File Renamed');
     }
         );
-    await db.query("DELETE FROM docu WHERE ID = ?", [docID]);
+    await db.query("DELETE FROM docs WHERE ID = ?", [docID]);
     // await unlinkAsync(docPath);
     res.send("File Deleted");
 
