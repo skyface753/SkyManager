@@ -93,7 +93,7 @@ let userService = {
         res.send("Enabled User: " + username);
     },
     changeEmail: async (req, res) => {
-        if(process.end.MODE == "DEMO"){
+        if(process.env.MODE == "DEMO"){
             res.sendStatus(403);
             return;
         }

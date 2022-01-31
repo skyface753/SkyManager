@@ -140,7 +140,7 @@ app.post('/upload', upload.single('myFile'), async(req, res, next) => {
         res.status(200).send("File uploaded")
     
   })
-  app.post('/image',async(req, res)=>{
+  app.post('/docs',async(req, res)=>{
       var customer_fk = req.body.customer_fk;
     const docs = await db.query("SELECT * FROM docs WHERE customer_fk = ?", [customer_fk]);
         res.send(docs);
@@ -151,7 +151,7 @@ app.post('/upload', upload.single('myFile'), async(req, res, next) => {
 
 const unlinkAsync = promisify(fs.unlink)
 
-app.post('/image/delete',async(req, res)=>{
+app.post('/docs/delete',async(req, res)=>{
     var docID = req.body.docID;
     var currentDoc = await db.query("SELECT path, uploadedName FROM docs WHERE id = ?", [docID]);
     var newDocName = currentDoc[0].uploadedName;
@@ -175,6 +175,7 @@ const imapHost = config.imapMail.host;
 
 if(config.db.host == null || config.db.user == null || config.db.password == null || config.db.database == null || config.masterkey == null){
     console.log("Config Envs not set - EXIT");
+    console.log("These envs are required: DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, MASTERKEY");
     process.exit(1);
 }
 function intervalFunc() {
