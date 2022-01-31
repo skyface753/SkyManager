@@ -12,8 +12,10 @@ async function sendMail(recipient, subject, text, ticketID) {
         return;
     }
     try{
-        text += '\n\n<br><a href="https://skymanager.page.link?ticketID=' + ticketID + '">Open Ticket in Android-APP</a>'
-        text += '\n\n<br><a href="sky://manager?ticketID=' + ticketID + '">Open Ticket in IOS-APP</a>'
+        text += '\n\n<br><a href="https://open.skymanager.net?ticketID=' + ticketID + '">Open Ticket in APP</a>'
+
+        // text += '\n\n<br><a href="https://skymanager.page.link?ticketID=' + ticketID + '">Open Ticket in Android-APP</a>'
+        // text += '\n\n<br><a href="sky://manager?ticketID=' + ticketID + '">Open Ticket in IOS-APP</a>'
         if(frontendURL != null){
             text += '<br><a href="' + frontendURL + '?ticketID=' + ticketID + '">Open Ticket in Web</a>'
         }

@@ -1,7 +1,7 @@
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=docker%20build%20backend)
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-frontend?label=docker%20build%20frontend)
-![Node-Tests](https://github.com/skyface753/SkyManager/actions/workflows/node-test.yml/badge.svg)
-![GitHub Build](https://github.com/skyface753/SkyManager/actions/workflows/docker-backend-build-and-push.yml/badge.svg)
+[![Node Tests](https://github.com/skyface753/SkyManager/actions/workflows/node-test.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/node-test.yml)
+[![Docker Backend CI](https://github.com/skyface753/SkyManager/actions/workflows/docker-backend-build-and-push.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/docker-backend-build-and-push.yml)
 
 ![Titelbild](https://github.com/skyface753/SkyManager/blob/main/Images/Icons/SkyManager-Titelbild-Without-Background.png)
 
