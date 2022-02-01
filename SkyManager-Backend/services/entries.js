@@ -45,7 +45,7 @@ let EntryService = {
         let { ticketID, newEintrag, newArbeitszeit, mailRecipient } = req.body;
         newArbeitszeit = newArbeitszeit.replace(/,/g, '.');
         var userID = await userService.getUsername(req);
-        await db.query("INSERT INTO `ticket_eintraege` (`Ticket_FK`, `User_FK`, `Beschreibung`, `Arbeitszeit`, `Datum`, `Zeit`) VALUES ('" + ticketID + "', '" + userID + "', 'Mail an: " + mailRecipient + ": " + newEintrag + "' , '" + newArbeitszeit + "', CURRENT_DATE(), CURRENT_TIME())");
+        await db.query("INSERT INTO `ticket_eintraege` (`Ticket_FK`, `User_FK`, `Beschreibung`, `Arbeitszeit`, `Datum`, `Zeit`) VALUES ('" + ticketID + "', '" + userID + "', 'Mail to: " + mailRecipient + ": " + newEintrag + "' , '" + newArbeitszeit + "', CURRENT_DATE(), CURRENT_TIME())");
         MailService.sendMail(mailRecipient, "Mail from Ticket #" + ticketID, newEintrag, ticketID);
         res.setHeader('Content-Type', 'application/json');
         res.send("SendMail for Ticket #" + ticketID);
