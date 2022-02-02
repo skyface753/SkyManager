@@ -154,14 +154,7 @@ let userService = {
     
     },
     refreshToken: async (req, res) => {
-        var token = req.body.token;
-        if(!token){
-            if(req.cookies.token){
-                token = req.cookies.token;
-            }else{
-                return false;
-            }
-        }
+        var token = getToken(req);
         var payload
         try {
             payload = jwt.verify(token, jwtKey)
@@ -197,18 +190,7 @@ let userService = {
         return isUserAnAdmin(req, res);
     },
     isLoggedIn: (req, res) => {
-        var token = req.body.token;
-        if(!token){
-            if(req.cookies.token){
-                token = req.cookies.token;
-            }else{
-                if(req.headers.authorization){
-                    token = req.headers.authorization;
-                }else{
-                return false;
-                }
-            }
-        }
+        var token = getToken(req);
         var payload
         try{
             payload = jwt.verify(token, jwtKey);
@@ -232,6 +214,19 @@ let userService = {
     }
 }
 
+function getToken(req){
+    var token = req.headers.authorization;
+    if(!token){
+        if(req.cookies.token){
+            token = req.cookies.token;
+        }else{
+                return false;
+            
+        }
+    }
+    return token;
+}
+
 function signToken(username, role_fk){
     const token = jwt.sign({ username, role_fk }, jwtKey, {
         algorithm: "HS256",
@@ -241,14 +236,7 @@ function signToken(username, role_fk){
 }
 
 function isUserAnAdmin (req, res)  {
-    var token = req.body.token;
-    if(!token){
-        if(req.cookies.token){
-            token = req.cookies.token;
-        }else{
-            return false;
-        }
-    }
+    var token = getToken(req);
     var payload
     try{
         payload = jwt.verify(token, jwtKey);
@@ -262,26 +250,15 @@ function isUserAnAdmin (req, res)  {
 }
 
 function getUsernameFromToken(req, res){
-    var token = req.body.token;
-    if(!token){
-        if(req.cookies.token){
-            token = req.cookies.token;
-        }else{
-            if(req.headers.authorization){
-                token = req.headers.authorization;
-            }else{
-                return false;
-            }
-        }
+    var token = getToken(req);
+    var payload
+    try{
+        payload = jwt.verify(token, jwtKey);
+    }catch (e){
+        console.log(e);
+        return false;
     }
-        var payload
-        try{
-            payload = jwt.verify(token, jwtKey);
-        }catch (e){
-            console.log(e);
-            return false;
-        }
-        return payload.username;
+    return payload.username;
 }
 
 module.exports = userService;
