@@ -11,6 +11,8 @@ const jwtKey = jwtKeyGenerator.jwtKey;
 
 const config = require('../config');
 const sendMailEnabled = config.smtpMail.host ? true : false;
+//Frontend Url from config. Else set to null
+const frontendUrl = config.frontendURL ? config.frontendURL : null;
 
 // 400 Bad Request - Invalid Input  // Logout
 // 401 Unauthorized (Token Expired) //Retry Login
@@ -135,6 +137,7 @@ let userService = {
                         username: usernameReturn,
                         email: emailReturn,
                         sendMailEnabled: sendMailEnabled,
+                        frontendUrl: frontendUrl
                     }
                     res.send(returnJson);
                 }else{
@@ -213,6 +216,19 @@ let userService = {
             return false;
         }
         return true;
+    },
+    //Save last tickets
+    saveLastTickets: async (req, res) => {
+        const userID = await getUsernameFromToken(req, res);
+        const { lastTickets } = req.body;
+        await db.query("UPDATE `user` SET `lastTickets` = '" + lastTickets + "' WHERE `Name` = '" + userID + "'");
+        res.send("Saved");
+    },
+    //Get last tickets
+    getLastTickets: async (req, res) => {
+        const userID = await getUsernameFromToken(req, res);
+        const user = await db.query("SELECT `lastTickets` FROM `user` WHERE `Name` = '" + userID + "'");
+        res.json(user[0].lastTickets);
     }
 }
 

@@ -11,6 +11,8 @@ router.post('/users/refreshToken', UserService.refreshToken);
 router.post('/users/disableUser', UserService.disableUser);
 router.post('/users/enableUser', UserService.enableUser);
 router.post('/users/changeMail', UserService.changeEmail);
+router.post('/users/savelastTickets', UserService.saveLastTickets);
+router.post('/users/getLastTickets', UserService.getLastTickets);
 
 const TicketService = require('../services/tickets');
 router.post('/tickets', TicketService.getTickets);
