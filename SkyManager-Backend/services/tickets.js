@@ -7,6 +7,12 @@ let ticketsService = {
         const tickets = await db.query("SELECT ticket_tickets.ID, ticket_tickets.Titel, ticket_tickets.Beschreibung, kunden.Name AS 'Kundenname', user.Name AS 'Zuständig', ticket_zustaende.Name AS 'Zustand' FROM ticket_tickets INNER JOIN kunden ON kunden.ID=ticket_tickets.Kunden_FK INNER JOIN user ON user.Name=ticket_tickets.User_FK INNER JOIN ticket_zustaende ON ticket_zustaende.ID = ticket_tickets.Zustand_FK WHERE NOT ticket_tickets.Zustand_FK='3' AND kunden.isActive = 1 ORDER BY `ticket_tickets`.`ID` DESC");
         res.json(tickets);
     },
+    // get Tickets where entries from today from user
+    getTicketsFromUserForToday: async (req, res) => {
+        const userID = await UserService.getUsername(req, res);
+        const ticketsToday = await db.query("SELECT ticket_tickets.ID, ticket_tickets.Titel, ticket_tickets.Beschreibung, kunden.Name AS 'Kundenname', user.Name AS 'Zuständig', ticket_zustaende.Name AS 'Zustand' FROM ticket_tickets INNER JOIN kunden ON kunden.ID=ticket_tickets.Kunden_FK INNER JOIN user ON user.Name=ticket_tickets.User_FK INNER JOIN ticket_zustaende ON ticket_zustaende.ID = ticket_tickets.Zustand_FK INNER JOIN ticket_eintraege ON ticket_eintraege.Ticket_FK = ticket_tickets.ID WHERE ticket_eintraege.Datum = CURRENT_DATE() AND ticket_eintraege.User_FK = ? GROUP BY `ticket_tickets`.`ID` ORDER BY `ticket_tickets`.`ID` DESC", [userID]);
+        res.json(ticketsToday);
+    },
     getMyTickets: async (req, res) => {
         const userID = await UserService.getUsername(req, res);
         const tickets = await db.query("SELECT ticket_tickets.ID, ticket_tickets.Titel, ticket_tickets.Beschreibung, kunden.Name AS 'Kundenname', user.Name AS 'Zuständig', ticket_zustaende.Name AS 'Zustand' FROM ticket_tickets INNER JOIN kunden ON kunden.ID=ticket_tickets.Kunden_FK INNER JOIN user ON user.Name=ticket_tickets.User_FK INNER JOIN ticket_zustaende ON ticket_zustaende.ID = ticket_tickets.Zustand_FK WHERE NOT ticket_tickets.Zustand_FK='3' AND kunden.isActive = 1 AND ticket_tickets.User_FK = '" + userID + "' ORDER BY `ticket_tickets`.`ID` DESC");

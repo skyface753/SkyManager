@@ -19,6 +19,7 @@ router.post('/tickets/allTickets', TicketService.getAllTickets);
 router.post('/tickets/create', TicketService.createTicket);
 router.post('/tickets/getDetails', TicketService.getDetails);
 router.post('/tickets/updateDetails', TicketService.updateDetails);
+router.post('/tickets/today', TicketService.getTicketsFromUserForToday);
 
 const EntryService = require('../services/entries');
 router.post('/entries', EntryService.getEntries);
