@@ -13,6 +13,8 @@ router.post('/users/enableUser', UserService.enableUser);
 router.post('/users/changeMail', UserService.changeEmail);
 router.post('/users/savelastTickets', UserService.saveLastTickets);
 router.post('/users/getLastTickets', UserService.getLastTickets);
+router.post('/users/generateFirstTOTP', UserService.generateFirstTOTP);
+router.post('/users/verifyFirstTOTP', UserService.verifyFirstTOTP);
 
 const TicketService = require('../services/tickets');
 router.post('/tickets', TicketService.getTickets);

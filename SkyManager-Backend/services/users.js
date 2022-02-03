@@ -4,6 +4,7 @@ const inputCheck = require('../helpers/inputCheck');
 // const jwtKey = "my_secret_key";
 const jwtExpirySeconds = 3000
 const bcrypt = require('bcrypt');
+var authenticator = require('authenticator');
 const saltRounds = 10;
 
 const jwtKeyGenerator = require('./jwtKey');
@@ -117,10 +118,25 @@ let userService = {
         }
         username = inputCheck.checkSpaces(username);
         username = username.toLowerCase();
-        const loggedInUser = await db.query("SELECT `Name`, `Passwort`, `role_fk`, `email` FROM `user` WHERE LOWER(`Name`) = '" + username + "' AND `isActive` = 1");
+        const loggedInUser = await db.query("SELECT `Name`, `Passwort`, `role_fk`, `email`, `TOTPkey`, `TOTPenabled` FROM `user` WHERE LOWER(`Name`) = '" + username + "' AND `isActive` = 1");
         if(loggedInUser.length > 0){
             bcrypt.compare(password, loggedInUser[0].Passwort, async function(err, result) {
+                
                 if(result){
+                    if(loggedInUser[0].TOTPenabled == 1){
+                        var formattedKey = loggedInUser[0].TOTPkey;
+                        var totpCode = req.body.totpCode;
+                        if(!totpCode){
+                            res.send("TOTP Required");
+                            return;
+                        }
+                        if(authenticator.verifyToken(formattedKey, totpCode)){
+                            console.log("TOTP Verified");
+                        }else{
+                            res.send("TOTP Failed");
+                            return;
+                        }
+                    }
                     var role_fkReturn = loggedInUser[0].role_fk;
                     var usernameReturn = loggedInUser[0].Name;
                     var emailReturn = loggedInUser[0].email;
@@ -211,7 +227,56 @@ let userService = {
         const userID = await getUsernameFromToken(req, res);
         const user = await db.query("SELECT `lastTickets` FROM `user` WHERE `Name` = '" + userID + "'");
         res.json(user[0].lastTickets);
-    }
+    },
+    // otpTest: async (req, res) => {
+    //     var formattedKey = authenticator.generateKey();
+    //     // "acqo ua72 d3yf a4e5 uorx ztkh j2xl 3wiz"
+    //     console.log("Formatted Key: " + formattedKey);
+    //     var formattedToken = authenticator.generateToken(formattedKey);
+    //     // "957 124"
+    //     console.log("Formatted Token: " + formattedToken);
+        
+    //     console.log("VERIFY: " + authenticator.verifyToken(formattedKey, formattedToken));
+    //     // { delta: 0 }
+        
+        
+    //     console.log("Failed Verify: " + authenticator.verifyToken(formattedKey, '000 000'));
+    //     // null
+        
+    //     res.send(authenticator.generateTotpUri(formattedKey, "john.doe@email.com", "ACME Co", 'SHA1', 6, 30));
+    // },
+    generateFirstTOTP: async (req, res) => {
+        const userID = await getUsernameFromToken(req, res);
+        var alreadyEnabled = await db.query("SELECT `TOTPenabled` FROM `user` WHERE `Name` =  ?", [userID]);
+        if(alreadyEnabled[0].TOTPenabled == 1){
+            res.send("Already enabled");
+            return;
+        }
+        var formattedKey = authenticator.generateKey();
+        // Get Usermail from Database
+        var usermail = await db.query("SELECT `email` FROM `user` WHERE `Name` = ?", [userID]);
+        usermail = usermail[0].email;
+        // Generate TOTP URI
+        var totpUri = authenticator.generateTotpUri(formattedKey, usermail, userID + "@SkyManager", 'SHA1', 6, 30);
+        // Save TOTP Key to Database
+        await db.query("UPDATE `user` SET `TOTPkey` = '" + formattedKey + "' WHERE `Name` = ?", [userID]);
+        // Send TOTP URI to User
+        res.send(totpUri);
+    },
+    verifyFirstTOTP: async (req, res) => {
+        const userID = await getUsernameFromToken(req, res);
+        var formattedKey = await db.query("SELECT `TOTPkey` FROM `user` WHERE `Name` = ?", [userID]);
+        formattedKey = formattedKey[0].TOTPkey;
+        var totpCode = req.body.totpCode;
+        if(authenticator.verifyToken(formattedKey, totpCode)){
+            await db.query("UPDATE `user` SET `TOTPenabled` = 1 WHERE `Name` = ?", [userID]);
+            res.send("Verified");
+        }else{
+            res.send("Failed");
+        }
+    },
+    
+        
 }
 
 function getToken(req){

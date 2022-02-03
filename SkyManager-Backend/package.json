@@ -23,6 +23,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.1.7",
     "nodemon": "^2.0.15",
-    "multer": "^1.4.4"
+    "multer": "^1.4.4",
+    "authenticator": "^1.1.5"
   }
 }
