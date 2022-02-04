@@ -2,7 +2,8 @@ const db = require('./db');
 const jwt = require("jsonwebtoken");
 const inputCheck = require('../helpers/inputCheck');
 // const jwtKey = "my_secret_key";
-const jwtExpirySeconds = 3000
+const jwtExpirySeconds = 3000 
+const jwtExpirySeconds30Days = 2592000;
 const bcrypt = require('bcrypt');
 var authenticator = require('authenticator');
 const saltRounds = 10;
@@ -31,7 +32,7 @@ let userService = {
             return;
         }
         const { username, newPassword } = req.body;
-        if(!isUserAnAdmin(req, res)){
+        if(! (await isUserAnAdmin(req, res))){
             if(getUsernameFromToken(req, res) == username){
             }else{
                 res.send("Current User isn't Admin");
@@ -49,7 +50,7 @@ let userService = {
     
     },
     changeRole: async (req, res) => {
-        if(!isUserAnAdmin(req, res)){
+        if(!(await isUserAnAdmin(req, res))){
             res.send("Current User isn't Admin"); 
             return;
         }
@@ -63,7 +64,7 @@ let userService = {
         res.send("Changed Role for: " + username + " to: " + newRole);
     },
     disableUser: async (req, res) => {
-        if(!isUserAnAdmin(req, res)){
+        if(!await isUserAnAdmin(req, res)){
             res.send("Current User isn't Admin");
             return;
         }
@@ -78,7 +79,7 @@ let userService = {
         res.send("Disabled User: " + username);
     },
     enableUser: async (req, res) => {
-        if(!isUserAnAdmin(req, res)){
+        if(! await isUserAnAdmin(req, res)){
             res.send("Current User isn't Admin");
             return;
         }
@@ -98,7 +99,7 @@ let userService = {
             return;
         }
         const { username, newMail } = req.body;
-        if(!isUserAnAdmin(req, res)){
+        if(!await isUserAnAdmin(req, res)){
             if(getUsernameFromToken(req, res) == username){
                 res.send("Current User isn't Admin but selfchange"); 
             }else{
@@ -111,7 +112,7 @@ let userService = {
         res.send("Changed Email for: " + username + " to: " + newMail);
     },
     login: async (req, res) => {    // Called in Server.js
-        let { username, password } = req.body;
+        let { username, password, stayLoggedIn } = req.body;
         if(!username || !password){
             res.status(400).send("Username or Password not set");
             return;
@@ -127,20 +128,21 @@ let userService = {
                         var formattedKey = loggedInUser[0].TOTPkey;
                         var totpCode = req.body.totpCode;
                         if(!totpCode){
-                            res.send("TOTP Required");
+                            res.status(400).send("TOTP Required");
                             return;
                         }
                         if(authenticator.verifyToken(formattedKey, totpCode)){
                             console.log("TOTP Verified");
                         }else{
-                            res.send("TOTP Failed");
+                            res.status(400).send("TOTP Failed");
                             return;
                         }
                     }
                     var role_fkReturn = loggedInUser[0].role_fk;
                     var usernameReturn = loggedInUser[0].Name;
                     var emailReturn = loggedInUser[0].email;
-                    const token = signToken(usernameReturn, role_fkReturn);
+                    console.log("stayLoggedIn: " + stayLoggedIn);
+                    const token = signToken(usernameReturn, role_fkReturn, stayLoggedIn);
 
                     res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
                     res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 })
@@ -179,7 +181,7 @@ let userService = {
             res.status(401);
             res.send("Payload Error");
         }
-        const newToken = signToken(payload.username, payload.role_fk);
+        const newToken = signToken(payload.username, payload.role_fk, stayLoggedIn);
         res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
         res.cookie("token", newToken, { maxAge: jwtExpirySeconds * 1000 })
         var returnJson = {
@@ -188,7 +190,7 @@ let userService = {
         res.send(returnJson);
     },
     createUser: async (req, res) => {
-        if(!isUserAnAdmin(req, res)){
+        if(!await isUserAnAdmin(req, res)){
             res.send("Current User isn't Admin"); 
             return;
         }
@@ -202,14 +204,15 @@ let userService = {
     getUsername: async (req, res) =>{
         return getUsernameFromToken(req, res);
     },
-    isUserAdminExport: (req, res) => {
-        return isUserAnAdmin(req, res);
+    isUserAdminExport: async (req, res) => {
+        return await isUserAnAdmin(req, res);
     },
     isLoggedIn: (req, res) => {
         var token = getToken(req);
         var payload
         try{
             payload = jwt.verify(token, jwtKey);
+            console.log(payload)
         }catch (e){
             return false;
         }
@@ -268,6 +271,10 @@ let userService = {
         var formattedKey = await db.query("SELECT `TOTPkey` FROM `user` WHERE `Name` = ?", [userID]);
         formattedKey = formattedKey[0].TOTPkey;
         var totpCode = req.body.totpCode;
+        if(!totpCode){
+            res.send("TOTP Required");
+            return;
+        }
         if(authenticator.verifyToken(formattedKey, totpCode)){
             await db.query("UPDATE `user` SET `TOTPenabled` = 1 WHERE `Name` = ?", [userID]);
             res.send("Verified");
@@ -275,6 +282,22 @@ let userService = {
             res.send("Failed");
         }
     },
+    disableTOTP: async (req, res) => {
+        const userID = await getUsernameFromToken(req, res);
+        var formattedKey = await db.query("SELECT `TOTPkey` FROM `user` WHERE `Name` = ?", [userID]);
+        formattedKey = formattedKey[0].TOTPkey;
+        var totpCode = req.body.totpCode;
+        if(!totpCode){
+            res.send("TOTP Required");
+            return;
+        }
+        if(authenticator.verifyToken(formattedKey, totpCode)){
+            await db.query("UPDATE `user` SET `TOTPenabled` = 0 WHERE `Name` = ?", [userID]);
+            res.send("Disabled");
+        }else{
+            res.send("Failed");
+        }
+    }
     
         
 }
@@ -292,15 +315,16 @@ function getToken(req){
     return token;
 }
 
-function signToken(username, role_fk){
+function signToken(username, role_fk, stayLoggedIn){
+    
     const token = jwt.sign({ username, role_fk }, jwtKey, {
         algorithm: "HS256",
-        expiresIn: jwtExpirySeconds,
+        expiresIn: stayLoggedIn ? jwtExpirySeconds30Days : jwtExpirySeconds
     })
     return token;
 }
 
-function isUserAnAdmin (req, res)  {
+async function isUserAnAdmin  (req, res)   {
     var token = getToken(req);
     var payload
     try{
@@ -308,7 +332,10 @@ function isUserAnAdmin (req, res)  {
     }catch (e){
         return false;
     }
-    if(payload.role_fk == "Admin"){
+    const username = payload.username;
+    var role = await db.query("SELECT `role_fk` FROM `user` WHERE `Name` = ?", [username]);
+    role = role[0].role_fk;
+    if(role == "Admin"){
         return true;
     }
     return false;      

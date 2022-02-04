@@ -12,9 +12,9 @@ async function query(sql, params) {
     const connection = await mysql.createConnection(config.db);
     const [results, ] = await connection.execute(sql, params);
     await connection.end();
-    if(process.env.MODE == "TEST"){
-      console.log("Result:" + results);
-    }
+    // if(process.env.MODE == "TEST"){
+    //   console.log("Result:" + results);
+    // }
     retryCounter = 0;
     return results;
   } catch(error){

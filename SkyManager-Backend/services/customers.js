@@ -21,7 +21,7 @@ let CustomerService = {
         res.send("New Kunde" + Name);
     },
     archiveCustomer: async (req, res) => {
-        if(UserService.isUserAdminExport(req, res)){
+        if(await UserService.isUserAdminExport(req, res)){
             const { kundenID } = req.body;
             await db.query("UPDATE `kunden` SET `isActive` = '0' WHERE `kunden`.`ID` = '" + kundenID + "'");
             res.setHeader('Content-Type', 'application/json');
@@ -29,7 +29,7 @@ let CustomerService = {
         }
     },
     reActivateCustomer: async (req, res) => {
-        if(UserService.isUserAdminExport(req, res)){
+        if(await UserService.isUserAdminExport(req, res)){
             const { kundenID } = req.body;
             await db.query("UPDATE `kunden` SET `isActive` = '1' WHERE `kunden`.`ID` = '" + kundenID + "'");
             res.setHeader('Content-Type', 'application/json');

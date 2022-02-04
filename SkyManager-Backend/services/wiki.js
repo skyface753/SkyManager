@@ -27,7 +27,7 @@ let WikiService = {
         res.send("Updated Wiki #" + updateWiki.wikiID);
     },
     deleteWiki: async (req, res) => {
-        if(!isUserAdminExport(req, res)){
+        if(!await isUserAdminExport(req, res)){
             res.setHeader('Content-Type', 'application/json');
             res.send("You are not allowed to delete this entry!");
             return false;
