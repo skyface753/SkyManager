@@ -34,4 +34,4 @@ jobs:
         with:
           context: SkyManager-Backend/.
           push: true
-          tags: skyface753/skymanager-backend:latest
+          tags: skyface753/skymanager:latest
