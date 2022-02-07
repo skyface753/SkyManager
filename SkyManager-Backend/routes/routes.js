@@ -16,6 +16,7 @@ router.post('/users/getLastTickets', UserService.getLastTickets);
 router.post('/users/generateFirstTOTP', UserService.generateFirstTOTP);
 router.post('/users/verifyFirstTOTP', UserService.verifyFirstTOTP);
 router.post('/users/disableTOTP', UserService.disableTOTP);
+router.post('/users/checkLoginToken', UserService.checkLoginToken);
 
 const TicketService = require('../services/tickets');
 router.post('/tickets', TicketService.getTickets);

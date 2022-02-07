@@ -171,6 +171,25 @@ let userService = {
         }
     
     },
+    checkLoginToken: async (req, res) => {
+        const username = getUsernameFromToken(req, res);
+        if(username){
+            const response = await db.query("SELECT `Name`, `Passwort`, `role_fk`, `email`, `TOTPkey`, `TOTPenabled` FROM `user` WHERE LOWER(`Name`) = '" + username + "' AND `isActive` = 1");
+            var role_fkReturn = response[0].role_fk;
+            var usernameReturn = response[0].Name;
+                    var emailReturn = response[0].email;
+            var returnJson = {
+                role_fk: role_fkReturn,
+                username: usernameReturn,
+                email: emailReturn,
+                sendMailEnabled: sendMailEnabled,
+                frontendUrl: frontendUrl
+            }
+            res.send(returnJson);
+        }else{
+            res.status(400).send("AuthError");
+        }
+    },
     refreshToken: async (req, res) => {
         var token = getToken(req);
         var payload
