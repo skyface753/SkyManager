@@ -22,7 +22,7 @@ let WikiService = {
     updateWiki: async (req, res) => {
         let updateWiki = req.body;
         
-        await db.query("UPDATE `wiki` SET `Titel` = '?', `Text` = '?' WHERE `wiki`.`ID` = '?'", [updateWiki.title, updateWiki.text, updateWiki.wikiID]);
+        await db.query("UPDATE `wiki` SET `Titel` = ?, `Text` = ? WHERE `wiki`.`ID` = ?", [updateWiki.title, updateWiki.text, updateWiki.wikiID]);
         res.setHeader('Content-Type', 'application/json');
         res.send("Updated Wiki #" + updateWiki.wikiID);
     },
