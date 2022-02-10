@@ -4,7 +4,7 @@ const UserService = require('./users');
 let taskService = {
     getActiveUserTasks: async (req, res) => {
         var ownUsername = await UserService.getUsername(req, res);
-        var tasks = await db.query("SELECT `tasks`.`ID`, `tasks`.`Titel`, `tasks`.`Beschreibung`, `tasks`.`DateTime`, `tasks`.`ticket_fk`, `tasks`.`isCompleted` FROM `tasks` LEFT JOIN `users_tasks` ON `users_tasks`.`Task_FK` = `tasks`.`ID` LEFT JOIN `user` ON `user`.`Name` = `users_tasks`.`User_FK` WHERE `user`.`Name` = ? OR `tasks`.`owner` = ?  GROUP BY `tasks`.`ID`;", [ownUsername, ownUsername]);
+        var tasks = await db.query("SELECT `tasks`.`ID`, `tasks`.`Titel`, `tasks`.`Beschreibung`, `tasks`.`DateTime`, `tasks`.`ticket_fk`, `tasks`.`isCompleted`, `tasks`.`owner` FROM `tasks` LEFT JOIN `users_tasks` ON `users_tasks`.`Task_FK` = `tasks`.`ID` LEFT JOIN `user` ON `user`.`Name` = `users_tasks`.`User_FK` WHERE `user`.`Name` = ? OR `tasks`.`owner` = ?  GROUP BY `tasks`.`ID`;", [ownUsername, ownUsername]);
         console.log("Tasks: " + tasks);
         res.json(tasks);
     },
@@ -114,7 +114,7 @@ let taskService = {
     },
     getTaskByID: async (req, res) => {
         var taskID = req.body.taskID;
-        var result = await db.query("SELECT `tasks`.`ID`, `tasks`.`Titel`, `tasks`.`Beschreibung`, `tasks`.`DateTime`, `tasks`.`ticket_fk`, `tasks`.`isCompleted` FROM `tasks` WHERE `ID` = '" + taskID + "';");
+        var result = await db.query("SELECT `tasks`.`ID`, `tasks`.`Titel`, `tasks`.`Beschreibung`, `tasks`.`DateTime`, `tasks`.`ticket_fk`, `tasks`.`isCompleted`, `tasks`.`owner` FROM `tasks` WHERE `ID` = '" + taskID + "';");
         var tastUsers = await db.query("SELECT `users_tasks`.`User_FK` FROM `users_tasks` INNER JOIN `tasks` ON `users_tasks`.`Task_FK` = `tasks`.`ID` WHERE `tasks`.`ID` = '" + taskID + "';");
         let response = {
             "ID": taskID,
