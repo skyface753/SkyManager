@@ -141,6 +141,7 @@ let userService = {
                     var role_fkReturn = loggedInUser[0].role_fk;
                     var usernameReturn = loggedInUser[0].Name;
                     var emailReturn = loggedInUser[0].email;
+                    var TOTPenabled = loggedInUser[0].TOTPenabled;
                     console.log("stayLoggedIn: " + stayLoggedIn);
                     const token = signToken(usernameReturn, role_fkReturn, stayLoggedIn);
 
@@ -155,7 +156,8 @@ let userService = {
                         username: usernameReturn,
                         email: emailReturn,
                         sendMailEnabled: sendMailEnabled,
-                        frontendUrl: frontendUrl
+                        frontendUrl: frontendUrl,
+                        TOTPenabled: TOTPenabled
                     }
                     res.send(returnJson);
                 }else{
@@ -178,12 +180,14 @@ let userService = {
             var role_fkReturn = response[0].role_fk;
             var usernameReturn = response[0].Name;
                     var emailReturn = response[0].email;
+                    var TOTPenabled = response[0].TOTPenabled;
             var returnJson = {
                 role_fk: role_fkReturn,
                 username: usernameReturn,
                 email: emailReturn,
                 sendMailEnabled: sendMailEnabled,
-                frontendUrl: frontendUrl
+                frontendUrl: frontendUrl,
+                TOTPenabled: TOTPenabled
             }
             res.send(returnJson);
         }else{
@@ -199,7 +203,10 @@ let userService = {
             res.clearCookie("token");
             res.status(401);
             res.send("Payload Error");
+            return;
         }
+        var stayLoggedIn = payload.stayLoggedIn;
+        console.log("stayLoggedIn: " + stayLoggedIn);
         const newToken = signToken(payload.username, payload.role_fk, stayLoggedIn);
         res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
         res.cookie("token", newToken, { maxAge: jwtExpirySeconds * 1000 })
@@ -250,23 +257,6 @@ let userService = {
         const user = await db.query("SELECT `lastTickets` FROM `user` WHERE `Name` = '" + userID + "'");
         res.json(user[0].lastTickets);
     },
-    // otpTest: async (req, res) => {
-    //     var formattedKey = authenticator.generateKey();
-    //     // "acqo ua72 d3yf a4e5 uorx ztkh j2xl 3wiz"
-    //     console.log("Formatted Key: " + formattedKey);
-    //     var formattedToken = authenticator.generateToken(formattedKey);
-    //     // "957 124"
-    //     console.log("Formatted Token: " + formattedToken);
-        
-    //     console.log("VERIFY: " + authenticator.verifyToken(formattedKey, formattedToken));
-    //     // { delta: 0 }
-        
-        
-    //     console.log("Failed Verify: " + authenticator.verifyToken(formattedKey, '000 000'));
-    //     // null
-        
-    //     res.send(authenticator.generateTotpUri(formattedKey, "john.doe@email.com", "ACME Co", 'SHA1', 6, 30));
-    // },
     generateFirstTOTP: async (req, res) => {
         const userID = await getUsernameFromToken(req, res);
         var alreadyEnabled = await db.query("SELECT `TOTPenabled` FROM `user` WHERE `Name` =  ?", [userID]);
@@ -336,7 +326,7 @@ function getToken(req){
 
 function signToken(username, role_fk, stayLoggedIn){
     
-    const token = jwt.sign({ username, role_fk }, jwtKey, {
+    const token = jwt.sign({ username, role_fk, stayLoggedIn }, jwtKey, {
         algorithm: "HS256",
         expiresIn: stayLoggedIn ? jwtExpirySeconds30Days : jwtExpirySeconds
     })
