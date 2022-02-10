@@ -77,44 +77,11 @@ function initDB(){
         myCon.query(InitDB, function(err, results) {
             if (err) throw err;
             for (let index = 0; index < results.length; index++) {
-                console.log(results[index]);
+                if(process.env.MODE == "TEST"){
+                    console.log(results[index]);
+                }
             }
         });
-        if(process.env.MODE == "TEST"){
-            console.log("DB TEST INIT");
-            for(i = 0; i < 10; i++){
-                myCon.query("INSERT INTO `kunden` (`ID`, `Name`, `mail`, `PLZ`, `Stadt`, `Strasse`, `Hausnummer`, `isActive`) VALUES (NULL, 'Sky-IT" + i + "', 'sjoerz@skyface.de', '12345', 'Frankfurt', 'Beispielstraße', '1', 1);", function(err, results) {
-                    if (err) throw err;
-                    for (let index = 0; index < results.length; index++) {
-                        console.log(results[index]);
-                    }
-                });
-            }
-            for(j = 0; j < 3; j++){
-                myCon.query("INSERT INTO `user` (`Name`, `email`, `Passwort`, `LastLogin_Date`, `LastLogin_Time`, `role_fk`, `isActive`) VALUES ('admin" + j + "', 'skymanager@example.de', '$2b$10$zptGhTsU.61bAoKo1dPE8.rhbiULWVlb32eC7c01lOEbwuhKqZEBi', '2021-12-14', '09:10:36', 'Admin', 1);", function(err, results) {
-                    if (err) throw err;
-                    for (let index = 0; index < results.length; index++) {
-                        console.log(results[index]);
-                    }
-                });
-            }
-            for(k = 0; k < 1000; k++){
-                myCon.query("INSERT INTO `ticket_tickets` (`ID`, `Kunden_FK`, `Titel`, `Beschreibung`, `Zustand_FK`, `User_FK`) VALUES (NULL, 1, 'Test" + k + "', 'Beschreibung123', 1, 'admin');", function(err, results) {
-                    if (err) throw err;
-                    for (let index = 0; index < results.length; index++) {
-                        console.log(results[index]);
-                    }
-                });
-            }
-            for(l = 0; l < 20; l++){
-                myCon.query("INSERT INTO `ticket_eintraege` (`ID`, `Ticket_FK`, `User_FK`, `Beschreibung`, `Arbeitszeit`, `Datum`, `Zeit`) VALUES (NULL, 10000, 'admin', 'Hallo" + l + ", ich habe gearbeitet :D', 0, '2021-07-02', '10:53:26');", function(err, results) {
-                    if (err) throw err;
-                    for (let index = 0; index < results.length; index++) {
-                        console.log(results[index]);
-                    }
-                });
-            }
-        }
     }catch(error){
         console.log("SQL Init Error: " + error);
     }

@@ -1,3 +1,5 @@
+const backendVersion = "1.0.0";
+
 const db = require('./db');
 const jwt = require("jsonwebtoken");
 const inputCheck = require('../helpers/inputCheck');
@@ -157,7 +159,8 @@ let userService = {
                         email: emailReturn,
                         sendMailEnabled: sendMailEnabled,
                         frontendUrl: frontendUrl,
-                        TOTPenabled: TOTPenabled
+                        TOTPenabled: TOTPenabled,
+                        backendVersion: backendVersion
                     }
                     res.send(returnJson);
                 }else{
@@ -187,7 +190,8 @@ let userService = {
                 email: emailReturn,
                 sendMailEnabled: sendMailEnabled,
                 frontendUrl: frontendUrl,
-                TOTPenabled: TOTPenabled
+                TOTPenabled: TOTPenabled,
+                backendVersion: backendVersion
             }
             res.send(returnJson);
         }else{

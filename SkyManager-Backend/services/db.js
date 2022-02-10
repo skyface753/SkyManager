@@ -12,9 +12,6 @@ async function query(sql, params) {
     const connection = await mysql.createConnection(config.db);
     const [results, ] = await connection.execute(sql, params);
     await connection.end();
-    // if(process.env.MODE == "TEST"){
-    //   console.log("Result:" + results);
-    // }
     retryCounter = 0;
     return results;
   } catch(error){
@@ -26,8 +23,8 @@ async function query(sql, params) {
       }, 2000);
     }else{
       retryCounter = 0;
-    console.log("Error in SQL Query " + error)
-    return {"Result": error};
+      console.log("Error in SQL Query " + error)
+      return {"Result": "Error"};
     }
   }
 }
@@ -37,36 +34,3 @@ module.exports = {
 }
 
 
-
-// // const mysql = require("mysql2/promise");
-// const dbConfig = require('../config').db;
-// var mysql = require('mysql');
-// var pool  = mysql.createPool({
-//   connectionLimit : 10,
-//   host: dbConfig.host,
-//   user: dbConfig.user,
-//   password: dbConfig.password,
-//   database: dbConfig.database,
-//   debug: false,
-//   multipleStatements: true,
-//   waitForConnections: true
-
-// });
-
-// async function query(sql, params) {
-//   try{
-//     pool.query(sql, function (error, results, fields) {
-//       if (error) throw error;
-//       return results;
-//     }
-      
-//     );
-//   } catch(error){
-//     console.log("Error in SQL Query")
-//     return {"Result": error};
-//   }
-// }
-
-// module.exports = {
-//   query
-// }
