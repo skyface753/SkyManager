@@ -76,5 +76,9 @@ router.post('/wiki/create', WikiService.createWiki);
 router.post('/wiki/update', WikiService.updateWiki);
 router.post('/wiki/delete', WikiService.deleteWiki);
 
+const TotpService = require('../services/totps');
+router.post('/totps', TotpService.getTotpPerCustomer);
+router.post('/totps/create', TotpService.createTotp);
+router.post('/totps/delete', TotpService.deleteTotp);
 
 module.exports = router;
