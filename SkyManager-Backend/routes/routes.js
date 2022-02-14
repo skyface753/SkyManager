@@ -80,5 +80,6 @@ const TotpService = require('../services/totps');
 router.post('/totps', TotpService.getTotpPerCustomer);
 router.post('/totps/create', TotpService.createTotp);
 router.post('/totps/delete', TotpService.deleteTotp);
+router.post('/totps/import', TotpService.import);
 
 module.exports = router;
