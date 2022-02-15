@@ -70,7 +70,7 @@ app.get('/health', async (req, res) => {
       definition: {
         openapi: '3.0.0',
         info: {
-          title: 'Hello World',
+          title: 'SkyManager API',
           version: '1.0.0',
         },
         components: {
