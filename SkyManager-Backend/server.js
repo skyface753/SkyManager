@@ -51,6 +51,59 @@ app.get('/health', async (req, res) => {
     }
     });
 
+    const swaggerJsdoc = require('swagger-jsdoc');
+    var swaggerUi = require("swagger-ui-express");
+
+    const DisableTryItOutPlugin = function() {
+        return {
+          statePlugins: {
+            spec: {
+              wrapSelectors: {
+                allowTryItOutFor: () => () => false
+              }
+            }
+          }
+        }
+      }
+
+    const options = {
+      definition: {
+        openapi: '3.0.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        components: {
+            securitySchemes: {
+              bearerAuth: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'Authorization'
+              }
+            }
+          },
+          security: [{
+            bearerAuth: []
+          }]
+        
+      },
+      swaggerOptions: {
+        plugins: [
+             DisableTryItOutPlugin
+        ]
+      },
+      apis: ['./services/wiki.js', './services/totps.js'], // files containing annotations as above
+    };
+
+    
+    
+    const openapiSpecification = swaggerJsdoc(options);
+    app.use(
+        "/api-docs",
+        swaggerUi.serve,
+        swaggerUi.setup(openapiSpecification)
+      );
+
 
 const initDBHelper = require('./helpers/initDB')
 var checkDBCounter = 0;

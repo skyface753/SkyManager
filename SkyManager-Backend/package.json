@@ -24,6 +24,8 @@
     "nodemon": "^2.0.15",
     "multer": "^1.4.4",
     "authenticator": "^1.1.5",
-    "otpauth-migration-parser": "^0.1.1"
+    "otpauth-migration-parser": "^0.1.1",
+    "swagger-jsdoc": "6.1.0",
+    "swagger-ui-express": "^4.3.0"
   }
 }

@@ -1,3 +1,47 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Wiki:
+ *       type: object
+ *       required:
+ *         - title
+ *         - text
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated id of the wiki.
+ *         titel:
+ *           type: string
+ *           description: The title of your wiki.
+ *         text:
+ *           type: string
+ *           description: The text of your wiki.
+ *       example:
+ *          titel: First Wiki
+ *          text: his is the first wiki.
+ */
+/**
+ * @swagger
+ * tags:
+ *   name: Wiki
+ *   description: Wiki management
+ */
+/**
+ * @swagger
+ * paths:
+ *  /wiki/:
+ *    post:
+ *     summary: Get all Wikis
+ *     tags: [Wiki]
+ *     responses:
+ *      "200":
+ *       description: A successful response
+ *       content:
+ *        application/json:
+ *         schema:
+ *          $ref: '#/components/schemas/Wiki'
+ */
 const db = require('./db');
 const { isUserAdminExport } = require('./users');
 

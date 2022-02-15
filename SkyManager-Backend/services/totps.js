@@ -1,3 +1,74 @@
+// secret, issuer, algorithm, digits, period, customer_fk
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Totp:
+ *       type: object
+ *       required:
+ *         - secret
+ *         - issuer
+ *         - algorithm
+ *         - digits
+ *         - period
+ *         - customer_fk
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: The auto-generated id of the Totp.
+ *         secret:
+ *           type: string
+ *           description: The secret of the totp.
+ *         issuer:
+ *           type: string
+ *           description: The issuer of the totp.
+ *         algorithm:
+ *          type: string
+ *          description: The algorithm of the totp.
+ *         digits:
+ *          type: integer
+ *          description: The digits of the totp.
+ *         period:
+ *          type: integer
+ *          description: The period of the totp.
+ *         customer_fk:
+ *          type: integer
+ *          description: The Customer.ID of the totp.
+ *       example:
+ *          secret: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+ *          issuer: 'admin@SkyManager'
+ *          algorithm: 'SHA1'
+ *          digits: 6
+ *          period: 30
+ *          customer_fk: 1
+ */
+/**
+ * @openapi
+ * tags:
+ *   name: Totp
+ *   description: Totp management
+ */
+/**
+ * @openapi
+ * paths:
+ *  /totps/:
+ *    post:
+ *     summary: Get all totps of a customer
+ *     tags: [Totp]
+ *     requestBody:
+ *      required: true
+ *      content:
+ *       application/json:
+ *        schema:
+ *         $ref: '#/components/schemas/Totp'
+ *     responses:
+ *      "200":
+ *       description: A successful response
+ *       content:
+ *        application/json:
+ *         schema:
+ *          $ref: '#/components/schemas/Totp'
+ */
 const db = require('./db');
 const parser = require("otpauth-migration-parser");
 
