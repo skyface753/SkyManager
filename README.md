@@ -1,7 +1,5 @@
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=docker%20build%20backend)
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-frontend?label=docker%20build%20frontend)
-[![Node Tests](https://github.com/skyface753/SkyManager/actions/workflows/node-test.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/node-test.yml)
-[![Docker Backend CI](https://github.com/skyface753/SkyManager/actions/workflows/docker-backend-build-and-push.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/docker-backend-build-and-push.yml)
 
 ![Titelbild](https://github.com/skyface753/SkyManager/blob/main/Images/Icons/SkyManager-Titelbild-Without-Background.png)
 
@@ -20,7 +18,14 @@
    8. MYSQL_DATABASE
    9. MYSQL_USER
    10. MYSQL_PASSWORD
-3.  Run "docker-compose up -d"
+3. If you want to use SSL, you need to use an official SSL certificate. (Self-Signed Certificates are not allowed by Frontend)
+   1. Copy the certificate and key into a folder like "ssl-certs"
+   2. Add Volume to docker-compose.yml:
+      - "./ssl-certs:/usr/src/app/sslcert"
+   3. Change the environment variables in the docker-compose.yml file:
+      1. SSL_CERT -> "Name of the certificate file.cert"
+      2. SSL_KEY -> "Name of the key file.key"
+4.  Run "docker-compose up -d"
 ```yaml
 version: "3.2"
 services:
@@ -28,8 +33,10 @@ services:
     image: skyface753/skymanager
     ports:
       - 8080:80
+      - 8443:443 # Only needed if you want to use SSL
     volumes:
       - ./uploads:/usr/src/app/uploads
+      - ./ssl-certs:/usr/src/app/sslcert # Only needed if you want to use SSL
     environment:
       DB_HOST: db                     
       DB_USER: dbUser
@@ -37,6 +44,8 @@ services:
       DB_NAME: dbName
       MASTER_KEY: MasterKey
       FRONTEND_URL: "http://<your IP or DNS>:80" #URL to the FrontEnd
+      SSL_CERT: "certificate.cert" # Only needed if you want to use SSL
+      SSL_KEY: "key.key" # Only needed if you want to use SSL
     restart: always
     depends_on:
       db:
@@ -71,28 +80,33 @@ services:
 
 ### SkyManager-Backend
 
-    DB_HOST || 'db',
-    DB_USER || 'userSkyManager',
-    DB_PASSWORD || "example",
-    DB_NAME || 'SkyManager',
-    MASTER_KEY || 'VQeR0Li42T'
-    SMTP_HOST 
-    SMTP_PORT
-    SMTP_USER
-    SMTP_PASSWORD
-    SMTP_SECURE || false
-    SMTP_SENDER || SMTP_USER
-    IMAP_USER
-    IMAP_PASSWORD
-    IMAP_HOST
-    IMAP_PORT
-    IMAP_TLS || false
-    INSTANCE_URL || null
-    FRONTEND_URL || null    // Sets the URL for Send-Mailer
+| Required | Variable | Default | Description |
+| -------- | -------- | ------- | ----------- |
+| Yes | DB_HOST | null | Hostname of the Database |
+| Yes | DB_USER | null | Username of the Database |
+| Yes | DB_PASSWORD | null | Password of the Database |
+| Yes | DB_NAME | null | Name of the Database |
+| Yes | MASTER_KEY | null | Key to Encyrpt the Customer-Passwords |
+| No  | SMTP_HOST | null | Hostname of the SMTP Server |
+| No  | SMTP_PORT | null | Port of the SMTP Server |
+| No  | SMTP_USER | null | Username of the SMTP Server |
+| No  | SMTP_PASSWORD | null | Password of the SMTP Server |
+| No  | SMTP_SECURE | false | Use SSL for the SMTP Server |
+| No  | SMTP_SENDER | SMTP_USER | Email-Address of the Sender |
+| No  | IMAP_USER | null | Username of the IMAP Server |
+| No  | IMAP_PASSWORD | null | Password of the IMAP Server |
+| No  | IMAP_HOST | null | Hostname of the IMAP Server |
+| No  | IMAP_PORT | null | Port of the IMAP Server |
+| No  | IMAP_TLS | false | Use SSL for the IMAP Server |
+| No  | FRONTEND_URL | null | URL to the Frontend for Send-Mailer |    
+| No  | SSL_KEY | null | Name of the SSL-Key-File |
+| No  | SSL_CERT | null | Name of the SSL-Cert-File |
 
 ## SkyManager-Frontend
 
-    BACKEND_URL || null     // User wont be asked for the url (Just asked for Username and Password)
+| Required | Variable | Default | Description |
+| -------- | -------- | ------- | ----------- |
+| No  | BACKEND_URL | null | URL to the Backend for Autofill |
 
 ## Encryption
 MASTER_KEY to encrypt the database. 
@@ -103,8 +117,11 @@ Username:   admin <br>
 Password:   SkyManager
 
 ## Datas
-db: /var/lib/mysql <br>
-Backend: /usr/src/app/uploads
+db: <br>
+/var/lib/mysql <br><br>
+Backend: <br>
+/usr/src/app/uploads<br>
+/usr/src/app/sslcert<br>
 
 
 # Development
@@ -119,8 +136,7 @@ docker-compose -f docker-compose-test.yml up
 docker-compose -f docker-compose up -d
 
 # DEMO
-demo.skymanager.net (Frontend) <br>
-demo-backend.skymanager.net (Backend)
+[SkyManager-Demo](https://demo.skymanager.net)
 
 ## Recreate the Backend and the Database for Demo every 10 Minutes:
 (cd /home/skyface/SkyManager-Demo/; docker-compose stop skymanager-demo-backend; docker-compose stop db; rm -r DbDataNeu/*; docker-compose start db; sleep 10s; docker-compose start skymanager-demo-backend)
@@ -128,8 +144,7 @@ demo-backend.skymanager.net (Backend)
 # Feedback
 In App you can send Feedback to the Developer.
 "Feedback" to Sentry
-"Send Feedback" to wiredash
 
 
-# Android
+<!-- # Android -->
 <!-- ![alt text](https://github.com/skyface753/SkyManager/blob/master/Images/Android-Screenshots/Login.jpg) -->

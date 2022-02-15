@@ -4,8 +4,10 @@ services:
     image: skyface753/nodejsrunner
     ports:
       - 8451:80
+      # - 4433:443
     volumes:
       - ./SkyManager-Backend/:/usr/src/app
+      # - ./test-ssl/:/usr/src/app/sslcert
     environment:
       DB_HOST: db
       DB_USER: userSkyManager
@@ -14,6 +16,8 @@ services:
       MASTER_KEY: "MasterKeyTest1234!"  # Enrcypt for Customer Passes
       MODE: TEST   # SQL Output
       FRONTEND_URL: "http://skymanager.skyface.de:8091"
+      # SSL_KEY: "privateKey.key"
+      # SSL_CERT: "certificate.crt"
     depends_on:
       db:
         condition: service_healthy

@@ -28,13 +28,10 @@ let DocuService = {
         })
         const file = req.file;
         if(!file){
-            console.log("No file received");
             res.status(400).send("No file received")
         }
-        console.log(JSON.stringify(file))
         var username = await userService.getUsername(req, res);
         db.query("INSERT INTO docu (name, path, type, size, user_fk, customer_fk) VALUES (?, ?, ?, ?, ?, ?)", [file.originalname, file.path, file.mimetype, file.size, username, req.body.customerFK]);
-        console.log("File uploaded");
         res.status(200).send("File uploaded")
     },
     getAll: async function(req, res){

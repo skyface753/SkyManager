@@ -13,6 +13,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 80
+EXPOSE 80 443
 CMD [ "node", "server.js" ]
 # CMD ["sh", "-c", "/usr/src/app/entrypoint.sh ; node server.js"]

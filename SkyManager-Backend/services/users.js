@@ -144,7 +144,6 @@ let userService = {
                     var usernameReturn = loggedInUser[0].Name;
                     var emailReturn = loggedInUser[0].email;
                     var TOTPenabled = loggedInUser[0].TOTPenabled;
-                    console.log("stayLoggedIn: " + stayLoggedIn);
                     const token = signToken(usernameReturn, role_fkReturn, stayLoggedIn);
 
                     res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
@@ -210,7 +209,6 @@ let userService = {
             return;
         }
         var stayLoggedIn = payload.stayLoggedIn;
-        console.log("stayLoggedIn: " + stayLoggedIn);
         const newToken = signToken(payload.username, payload.role_fk, stayLoggedIn);
         res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
         res.cookie("token", newToken, { maxAge: jwtExpirySeconds * 1000 })
@@ -242,7 +240,6 @@ let userService = {
         var payload
         try{
             payload = jwt.verify(token, jwtKey);
-            console.log(payload)
         }catch (e){
             return false;
         }

@@ -3,6 +3,9 @@ const express = require('express');
 const jwt = require("jsonwebtoken")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
+const config = require('./config.js');
+const sslconfig = config.ssl;
+const fs = require('fs')
 const port = 80;
 var app = express();
 const db = require('./services/db.js');
@@ -11,6 +14,7 @@ const sendMail = require('./services/sendMail.js');
 const jwtKeyGenerator = require('./services/jwtKey');
 const jwtKey = jwtKeyGenerator.jwtKey;
 const jwtExpirySeconds = 3000
+
 
 
 
@@ -137,7 +141,7 @@ app.post('/upload', upload.single('myFile'), async(req, res, next) => {
         res.send(docs);
     
    })
-   const fs = require('fs')
+   
    const { promisify } = require('util')
 
 const unlinkAsync = promisify(fs.unlink)
@@ -160,7 +164,7 @@ app.post('/docs/delete',async(req, res)=>{
   
 
 const MailService = require('./services/receiveMail.js');
-const config = require('./config.js');
+
 const imapHost = config.imapMail.host;
 
 if(config.db.host == null || config.db.user == null || config.db.password == null || config.db.database == null || config.masterkey == null){
@@ -186,11 +190,23 @@ app.use('/', routes);
 // Catch all exceptions 
 process.on('uncaughtException', function (err) {
     console.log("-----------Begin Uncaught Exception---------");
-    console.log("Uncaught Exception: " + err);
+    console.log(err);
     console.log("-----------End Uncaught Exception---------");
   });
 
+// SSL Config
 
+if(sslconfig.cert && sslconfig.key){
+    console.log("Start with SSL")
+    const https = require('https');
+    var privateKey = fs.readFileSync('sslcert/' + sslconfig.key, 'utf8');
+    var certificate = fs.readFileSync('sslcert/' + sslconfig.cert, 'utf8');
+    var credentials = { key: privateKey, cert: certificate };
+    var httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(443);
+    console.log("Started with SSL - Port 443")
+}
+// END SSL Config
 
 
 var httpServer = http.createServer(app);

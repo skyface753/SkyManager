@@ -3,6 +3,10 @@ const env = process.env;
 
 
 const config = {
+  ssl:{
+    key: env.SSL_KEY || null,
+    cert: env.SSL_CERT || null,
+  },
   db: {
     host: env.DB_HOST || null,
     user: env.DB_USER || null,
@@ -29,7 +33,6 @@ const config = {
     port: env.IMAP_PORT,
     tls: env.IMAP_TLS || false,
   },
-  instanceUrl: env.INSTANCE_URL || null,
   frontendURL: env.FRONTEND_URL || null,
 };
 

@@ -10,10 +10,10 @@
     "test": "echo \"Test: No Tests\" && exit 0"
   },
   "dependencies": {
-    "express": "^4.16.1",
+    "express": "^4.17.2",
     "mysql": "^2.18.1",
     "jsonwebtoken": "^8.5.1",
-    "cookie-parser": "^1.4.5",
+    "cookie-parser": "^1.4.6",
     "mysql2": "^2.3.3",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
@@ -21,7 +21,6 @@
     "imap-simple": "^5.1.0",
     "mailparser": "^3.4.0",
     "lodash": "^4.17.21",
-    "mongoose": "^6.1.7",
     "nodemon": "^2.0.15",
     "multer": "^1.4.4",
     "authenticator": "^1.1.5",
