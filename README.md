@@ -82,31 +82,31 @@ services:
 
 | Required | Variable | Default | Description |
 | -------- | -------- | ------- | ----------- |
-| Yes | DB_HOST | null | Hostname of the Database |
-| Yes | DB_USER | null | Username of the Database |
-| Yes | DB_PASSWORD | null | Password of the Database |
-| Yes | DB_NAME | null | Name of the Database |
-| Yes | MASTER_KEY | null | Key to Encyrpt the Customer-Passwords |
-| No  | SMTP_HOST | null | Hostname of the SMTP Server |
-| No  | SMTP_PORT | null | Port of the SMTP Server |
-| No  | SMTP_USER | null | Username of the SMTP Server |
-| No  | SMTP_PASSWORD | null | Password of the SMTP Server |
+| Yes | DB_HOST |  | Hostname of the Database |
+| Yes | DB_USER |  | Username of the Database |
+| Yes | DB_PASSWORD |  | Password of the Database |
+| Yes | DB_NAME |  | Name of the Database |
+| Yes | MASTER_KEY |  | Key to Encyrpt the Customer-Passwords |
+| No  | SMTP_HOST |  | Hostname of the SMTP Server |
+| No  | SMTP_PORT |  | Port of the SMTP Server |
+| No  | SMTP_USER |  | Username of the SMTP Server |
+| No  | SMTP_PASSWORD |  | Password of the SMTP Server |
 | No  | SMTP_SECURE | false | Use SSL for the SMTP Server |
 | No  | SMTP_SENDER | SMTP_USER | Email-Address of the Sender |
-| No  | IMAP_USER | null | Username of the IMAP Server |
-| No  | IMAP_PASSWORD | null | Password of the IMAP Server |
-| No  | IMAP_HOST | null | Hostname of the IMAP Server |
-| No  | IMAP_PORT | null | Port of the IMAP Server |
+| No  | IMAP_USER |  | Username of the IMAP Server |
+| No  | IMAP_PASSWORD |  | Password of the IMAP Server |
+| No  | IMAP_HOST |  | Hostname of the IMAP Server |
+| No  | IMAP_PORT |  | Port of the IMAP Server |
 | No  | IMAP_TLS | false | Use SSL for the IMAP Server |
-| No  | FRONTEND_URL | null | URL to the Frontend for Send-Mailer |    
-| No  | SSL_KEY | null | Name of the SSL-Key-File |
-| No  | SSL_CERT | null | Name of the SSL-Cert-File |
+| No  | FRONTEND_URL |  | URL to the Frontend for Send-Mailer |    
+| No  | SSL_KEY |  | Name of the SSL-Key-File |
+| No  | SSL_CERT |  | Name of the SSL-Cert-File |
 
 ## SkyManager-Frontend
 
 | Required | Variable | Default | Description |
 | -------- | -------- | ------- | ----------- |
-| No  | BACKEND_URL | null | URL to the Backend for Autofill |
+| No  | BACKEND_URL |  | URL to the Backend for Autofill |
 
 ## Encryption
 MASTER_KEY to encrypt the database. 
