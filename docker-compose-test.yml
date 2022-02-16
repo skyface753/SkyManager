@@ -6,9 +6,9 @@ services:
       - 8451:80
     environment:
       DB_HOST: db
-      DB_USER: userSkyManager
-      DB_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
-      DB_NAME: SkyManager
+      MYSQL_USER: userSkyManager
+      MYSQL_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
+      MYSQL_DATABASE: SkyManager
       MASTER_KEY: "MasterKeyTest1234!"  # Enrcypt for Customer Passes
       MODE: TEST   # SQL Output & More Test-Datas
       FRONTEND_URL: "http://localhost:80"

@@ -10,13 +10,13 @@ services:
       # - ./test-ssl/:/usr/src/app/sslcert
     environment:
       DB_HOST: db
-      DB_USER: userSkyManager
-      DB_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
-      DB_NAME: SkyManager
-      MASTER_KEY: "MasterKeyTest1234!"  # Enrcypt for Customer Passes
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MASTER_KEY: ${MASTER_KEY}  # Enrcypt for Customer Passes
       MODE: TEST   # SQL Output
-      FRONTEND_URL: "http://skymanager.skyface.de:8091"
-      SHOW_API_DOCS: 'true'
+      FRONTEND_URL: ${FRONTEND_URL}
+      SHOW_API_DOCS: ${SHOW_API_DOCS}
       # SSL_KEY: "privateKey.key"
       # SSL_CERT: "certificate.crt"
     depends_on:
@@ -28,9 +28,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: SkyManager
-      MYSQL_USER: userSkyManager
-      MYSQL_PASSWORD: "T%8C=91F+4SW!Fg5U.OM"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     healthcheck:

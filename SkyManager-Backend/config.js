@@ -9,9 +9,9 @@ const config = {
   },
   db: {
     host: env.DB_HOST || null,
-    user: env.DB_USER || null,
-    password: env.DB_PASSWORD || null,
-    database: env.DB_NAME || null,
+    user: env.MYSQL_USER || null,
+    password: env.MYSQL_PASSWORD || null,
+    database: env.MYSQL_DATABASE || null,
   },
   masterkey:{
     key: env.MASTER_KEY || null,

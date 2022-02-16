@@ -6,11 +6,11 @@ services:
       - 8452:80
     environment:
       DB_HOST: db                       
-      DB_USER: userSkyManager
-      DB_PASSWORD: "TestDBPass123"
-      DB_NAME: SkyManager
-      MASTER_KEY: "MasterKeyTestPass123!!!"
-      FRONTEND_URL: "http://skymanager.skyface.de:8091"
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MASTER_KEY: ${MASTER_KEY}  # Enrcypt for Customer Passes
+      FRONTEND_URL: ${FRONTEND_URL}
     restart: always
     depends_on:
       db:
@@ -30,9 +30,9 @@ services:
       - ./DB-Data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: exampleeee
-      MYSQL_DATABASE: SkyManager
-      MYSQL_USER: userSkyManager
-      MYSQL_PASSWORD: "TestDBPass123"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     healthcheck:
       test: ["CMD", "mysqladmin", "-uroot" , "-pexampleeee" ,"ping", "-h", "localhost"]
       timeout: 5s

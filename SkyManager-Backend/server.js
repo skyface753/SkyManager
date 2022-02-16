@@ -51,7 +51,7 @@ app.get('/health', async (req, res) => {
   }
 });
 
-if(config.showapidocs){
+if(config.showapidocs && config.showapidocs != "false"){
   const swaggerJsdoc = require('swagger-jsdoc');
   var swaggerUi = require("swagger-ui-express");
 
@@ -239,7 +239,7 @@ const imapHost = config.imapMail.host;
 
 if(config.db.host == null || config.db.user == null || config.db.password == null || config.db.database == null || config.masterkey == null){
     console.log("Config Envs not set - EXIT");
-    console.log("These envs are required: DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, MASTERKEY");
+    console.log("These envs are required: DB_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MASTERKEY");
     process.exit(1);
 }
 function intervalFunc() {
