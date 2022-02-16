@@ -1,3 +1,78 @@
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *   User:
+ *    type: object
+ *    required:
+ *     - Name
+ *     - Passwort
+ *     - email
+ *     - role_fk
+ *     - isActive
+ *    properties:
+ *     Name:
+ *      type: string
+ *      description: The unique username of the user. (Primary Key)
+ *     Passwort:
+ *      type: string
+ *      description: The password of the user. (bcrypt hashed)
+ *     email:
+ *      type: string
+ *      description: The email of the user.
+ *     LastLogin_Date:
+ *      type: date
+ *      description: The date of the last login of the user.
+ *     LastLogin_Time:
+ *      type: time
+ *      description: The time of the last login of the user.
+ *     role_fk:
+ *      type: string
+ *      description: The role of the user.
+ *     isActive:
+ *      type: int
+ *      description: The status of the user. (0 = inactive, 1 = active)
+ */
+/**
+ * @swagger
+ * tags:
+ *   name: User
+ *   description: User management
+ */
+/**
+ * @swagger
+ * paths:
+ *  /login/:
+ *    post:
+ *     summary: Login a user
+ *     tags: [User]
+ *     requestBody:
+ *      required: true
+ *      content:
+ *       application/x-www-form-urlencoded:
+ *        schema:
+ *         type: object
+ *         properties:
+ *          username:
+ *           type: string
+ *           example: 'admin'
+ *          password:
+ *           type: string
+ *           example: 'SkyManager'
+ *          stayLoggedIn:
+ *           type: boolean
+ *           example: false
+ *     responses:
+ *      "200":
+ *       description: A successful response
+ *       content:
+ *        application/json:
+ *         schema:
+ *          type: object
+ *          properties:
+ *           token:
+ *            type: string      
+ */
 const backendVersion = "1.0.0";
 
 const db = require('./db');
@@ -116,6 +191,7 @@ let userService = {
     login: async (req, res) => {    // Called in Server.js
         let { username, password, stayLoggedIn } = req.body;
         if(!username || !password){
+            console.log("Username: " + username + " Password: " + password);
             res.status(400).send("Username or Password not set");
             return;
         }

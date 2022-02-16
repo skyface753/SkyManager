@@ -16,6 +16,7 @@ services:
       MASTER_KEY: "MasterKeyTest1234!"  # Enrcypt for Customer Passes
       MODE: TEST   # SQL Output
       FRONTEND_URL: "http://skymanager.skyface.de:8091"
+      SHOW_API_DOCS: 'true'
       # SSL_KEY: "privateKey.key"
       # SSL_CERT: "certificate.crt"
     depends_on:

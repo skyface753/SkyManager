@@ -43,67 +43,84 @@ app.use(function (req, res, next) {
 
 
 app.get('/health', async (req, res) => {
-    var healthCheck = await db.query("SELECT 1") || {};
-    if(healthCheck.length > 0) {
-        res.send("OK");
-    } else {
-        res.send("DB Error");
-    }
-    });
+  var healthCheck = await db.query("SELECT 1") || {};
+  if(healthCheck.length > 0) {
+      res.send("OK");
+  } else {
+      res.send("DB Error");
+  }
+});
 
-    const swaggerJsdoc = require('swagger-jsdoc');
-    var swaggerUi = require("swagger-ui-express");
+if(config.showapidocs){
+  const swaggerJsdoc = require('swagger-jsdoc');
+  var swaggerUi = require("swagger-ui-express");
 
-    const DisableTryItOutPlugin = function() {
-        return {
-          statePlugins: {
-            spec: {
-              wrapSelectors: {
-                allowTryItOutFor: () => () => false
-              }
+  const DisableTryItOutPlugin = function() {
+      return {
+        statePlugins: {
+          spec: {
+            wrapSelectors: {
+              allowTryItOutFor: () => () => false
             }
           }
         }
       }
+    }
 
-    const options = {
-      definition: {
-        openapi: '3.0.0',
-        info: {
-          title: 'SkyManager API',
-          version: '1.0.0',
-        },
-        components: {
-            securitySchemes: {
-              bearerAuth: {
-                type: 'apiKey',
-                in: 'header',
-                name: 'Authorization'
-              }
+  const options = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'SkyManager API',
+        version: '1.0.0',
+      },
+      components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: 'apiKey',
+              in: 'header',
+              name: 'Authorization'
             }
-          },
-          security: [{
-            bearerAuth: []
-          }]
-        
-      },
-      swaggerOptions: {
-        plugins: [
-             DisableTryItOutPlugin
-        ]
-      },
-      apis: ['./services/wiki.js', './services/totps.js'], // files containing annotations as above
-    };
+          }
+        },
+        security: [{
+          bearerAuth: []
+        }]
+      
+    },
+    swaggerOptions: {
+      plugins: [
+            DisableTryItOutPlugin
+      ]
+    },
+    apis: ['./services/users.js', './services/wiki.js', './services/totps.js'], // files containing annotations as above
+  };
+  const openapiSpecification = swaggerJsdoc(options);
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(openapiSpecification)
+  );
+}
 
+// DEMO DROP DATABASE EVERY 10 MINUTES
+// if(process.env.MODE == "DEMO"){
+//   var minutes = 1, the_interval = minutes * 30 * 1000;
+//   setInterval(async function() {
+//     console.log("Reset Database for Demo");
+//     var allTables = await db.query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA=?;" , [config.db.database]);
     
-    
-    const openapiSpecification = swaggerJsdoc(options);
-    app.use(
-        "/api-docs",
-        swaggerUi.serve,
-        swaggerUi.setup(openapiSpecification)
-      );
-
+//     for(var i = 0; i < allTables.length; i++){
+//       await db.query("ALTER TABLE `" + allTables[i]["TABLE_NAME"] + "` DISABLE KEYS");
+//       await db.query("DROP TABLE " + allTables[i]["TABLE_NAME"]);
+//       // await db.query("ALTER TABLE ? ENABLE KEYS;" , [allTables[i]["TABLE_NAME"]]);
+//     }
+//     // await db.query("SET GLOBAL FOREIGN_KEY_CHECKS=0;");
+//     // await db.query("DROP DATABASE `?`", [config.db.database]);
+//     checkTheDatabase();
+//   }, the_interval);
+// }
+  
 
 const initDBHelper = require('./helpers/initDB')
 var checkDBCounter = 0;

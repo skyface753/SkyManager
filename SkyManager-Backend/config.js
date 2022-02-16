@@ -34,6 +34,7 @@ const config = {
     tls: env.IMAP_TLS || false,
   },
   frontendURL: env.FRONTEND_URL || null,
+  showapidocs: env.SHOW_API_DOCS || false,
 };
 
 
