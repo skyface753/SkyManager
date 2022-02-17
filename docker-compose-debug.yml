@@ -1,7 +1,9 @@
 version: "3.2"
 services:
-  DEBUG-Backend:   # DEBUG
-    image: skyface753/nodejsrunner
+  debug-backend:   # DEBUG
+    build:
+      context: ./SkyManager-Backend
+      target: dev
     ports:
       - 8451:80
       # - 4433:443

@@ -3,38 +3,38 @@ services:
   skymanager-backend:
     image: skyface753/skymanager
     ports:
-      - 8452:80
+      - 80:80
     environment:
-      DB_HOST: db                       
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MASTER_KEY: ${MASTER_KEY}  # Enrcypt for Customer Passes
-      FRONTEND_URL: ${FRONTEND_URL}
+      DB_HOST: db-service                       
+      MYSQL_USER: DatabaseUser # Refer to db-service
+      MYSQL_PASSWORD: "DatabasePassword" # Refer to db-service
+      MYSQL_DATABASE: SkyManagerDatabase # Refer to db-service
+      MASTER_KEY: "EnryptionKey"  # Enrcypt for Customer Passes (Dont change this after first start)
+      FRONTEND_URL: "https://skymanager.example.com:8080" # Refer to skymanager-frontend
     restart: always
     depends_on:
-      db:
+      db-service:
         condition: service_healthy
 
   skymanager-frontend:
     image: skyface753/skymanager-frontend
     ports:
-      - 8091:80
-    environment:
-      BACKEND_URL: "https://skymanager.skyface.de"
+      - 8080:80
+    # environment:
+    #   BACKEND_URL: "https://skymanager.example.com" # Refer to backend
     
-  db:
+  db-service:
     image: mariadb
     restart: always
     volumes:
       - ./DB-Data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: exampleeee
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    healthcheck:
-      test: ["CMD", "mysqladmin", "-uroot" , "-pexampleeee" ,"ping", "-h", "localhost"]
+      MYSQL_ROOT_PASSWORD: RootPassword
+      MYSQL_DATABASE: SkyManagerDatabase
+      MYSQL_USER: DatabaseUser 
+      MYSQL_PASSWORD: "DatabasePassword"
+    healthcheck:                           # Change \/ this 
+      test: ["CMD", "mysqladmin", "-uroot" , "-pRootPassword" ,"ping", "-h", "localhost"]
       timeout: 5s
       retries: 10
 
@@ -42,14 +42,14 @@ services:
     image: fradelg/mysql-cron-backup
     restart: always
     environment:
-      MYSQL_HOST: db
+      MYSQL_HOST: db-service
       MYSQL_USER: root
-      MYSQL_PASS: exampleeee
+      MYSQL_PASS: RootPassword
       INIT_BACKUP: "1"
       MAX_BACKUPS: 5
       TZ: "Europe/Berlin"
     depends_on:
-      db:
+      db-service:
         condition: service_healthy
     volumes:
       - ./backup:/backup

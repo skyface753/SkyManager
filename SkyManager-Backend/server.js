@@ -128,8 +128,9 @@ checkTheDatabase()
 async function checkTheDatabase(){
     try{
 
-        var result = await db.query("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'SkyManager' AND table_name = 'ticket_tickets');")
-        result = result[0]["EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'SkyManager' AND table_name = 'ticket_tickets')"]
+        var result = await db.query("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = '" + config.db.database + "' AND table_name = 'ticket_tickets');");
+        console.log(JSON.stringify(result))
+        result = result[0]["EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = '" + config.db.database + "' AND table_name = 'ticket_tickets')"]
         console.log("DB Check: " + result)
         if(result == 0){
             console.log("-----------------Init DB-----------");
@@ -263,6 +264,7 @@ process.on('uncaughtException', function (err) {
     console.log(err);
     console.log("-----------End Uncaught Exception---------");
   });
+
 
 // SSL Config
 
