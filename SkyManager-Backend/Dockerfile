@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 EXPOSE 80
-CMD [ "npm", "run", "watch" ]
+CMD [ "npm", "run", "debug" ]
 
 FROM node
 # Create app directory

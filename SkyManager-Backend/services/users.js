@@ -71,7 +71,18 @@
  *          type: object
  *          properties:
  *           token:
- *            type: string      
+ *            type: string   
+ *  /users/:
+ *   post:
+ *    summary: Gets all users
+ *    tags: [User]
+ *    responses:
+ *     "200":
+ *     description: A successful response
+ *     content:
+ *      application/json:
+ *       schema:
+ *        #ref: '#/components/schemas/User'   
  */
 const backendVersion = "1.0.0";
 

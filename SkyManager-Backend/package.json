@@ -6,9 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "debug": "node server.js",
     "test": "echo \"Test: No Tests\" && exit 0",
-    "watch": "nodemon -L server.js"
+    "debug": "npm install && nodemon -L server.js"
   },
   "dependencies": {
     "express": "^4.17.2",

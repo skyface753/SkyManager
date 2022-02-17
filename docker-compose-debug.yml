@@ -18,7 +18,7 @@ services:
       MASTER_KEY: ${MASTER_KEY}  # Enrcypt for Customer Passes
       MODE: TEST   # SQL Output
       FRONTEND_URL: ${FRONTEND_URL}
-      SHOW_API_DOCS: ${SHOW_API_DOCS}
+      SHOW_API_DOCS: 1
       # SSL_KEY: "privateKey.key"
       # SSL_CERT: "certificate.crt"
     depends_on:
