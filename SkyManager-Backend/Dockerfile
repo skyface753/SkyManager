@@ -1,4 +1,5 @@
-FROM node as dev
+ARG ARCH=
+FROM ${ARCH}node as dev
 # Create app directory
 WORKDIR /usr/src/app
 # Install app dependencies
@@ -7,7 +8,8 @@ RUN npm install
 EXPOSE 80
 CMD [ "npm", "run", "debug" ]
 
-FROM node
+ARG ARCH=
+FROM ${ARCH}node
 # Create app directory
 WORKDIR /usr/src/app
 # Install app dependencies

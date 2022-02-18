@@ -126,7 +126,7 @@ Backend: <br>
 
 # Development
 ## Debug
-docker-compose -f docker-compose-debug.yml up
+docker-compose -f docker-compose-debug.yml up -d --build
 
 ## Test
 docker-compose -f docker-compose-test.yml build <br>
@@ -134,6 +134,9 @@ docker-compose -f docker-compose-test.yml up
 
 ## Prod
 docker-compose -f docker-compose up -d
+
+### Build for Prod MultiArch
+docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skymanager ./SkyManager-Backend
 
 # DEMO
 [SkyManager-Demo](https://demo.skymanager.net)
