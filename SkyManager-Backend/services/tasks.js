@@ -32,11 +32,11 @@ let taskService = {
         var task = req.body;
         if(!await isOwnerOfTask(req, res, task.taskID)) {
             return;
-        }
+        }var result;
         if(task.ticket_fk) {
-            var result = await db.query("UPDATE `tasks` SET `Titel` = '" + task.title + "', `Beschreibung` = '" + task.description + "', `DateTime` = '" + task.datetime + "', `ticket_fk` = '" + task.ticket_fk + "' WHERE `ID` = '" + task.taskID + "';");
+            result = await db.query("UPDATE `tasks` SET `Titel` = '" + task.title + "', `Beschreibung` = '" + task.description + "', `DateTime` = '" + task.datetime + "', `ticket_fk` = '" + task.ticket_fk + "' WHERE `ID` = '" + task.taskID + "';");
         } else {
-            var result = await db.query("UPDATE `tasks` SET `Titel` = '" + task.title + "', `Beschreibung` = '" + task.description + "', `DateTime` = '" + task.datetime + "', `ticket_fk` = NULL WHERE `ID` = '" + task.taskID + "';");
+            result = await db.query("UPDATE `tasks` SET `Titel` = '" + task.title + "', `Beschreibung` = '" + task.description + "', `DateTime` = '" + task.datetime + "', `ticket_fk` = NULL WHERE `ID` = '" + task.taskID + "';");
         }
         // Read current users from db. Delete all users from users_tasks and add the new ones.
         var currentUsers = await db.query("SELECT `User_FK` FROM `users_tasks` WHERE `Task_FK` = '" + task.taskID + "';");
@@ -88,7 +88,7 @@ let taskService = {
             "ID": taskID,
             tasks: result,
             users_tasks: result2
-        }
+        };
         res.json(response);
     },
     completeTask: async (req, res) => {
@@ -100,7 +100,7 @@ let taskService = {
         let response = {
             "ID": taskID,
             "Result": result
-        }
+        };
         res.json(response);
     },
     reopenTask: async (req, res) => {
@@ -109,7 +109,7 @@ let taskService = {
         let response = {
             "ID": taskID,
             "Result": result
-        }
+        };
         res.json(response);
     },
     getTaskByID: async (req, res) => {
@@ -120,12 +120,12 @@ let taskService = {
             "ID": taskID,
             "Result": result,
             "Users": tastUsers
-        }
+        };
         res.json(response);
     }
     
 
-}
+};
 
 async function isOwnerOfTask(req, res, taskID) {
     var ownUsername = await UserService.getUsername(req, res);
@@ -133,7 +133,7 @@ async function isOwnerOfTask(req, res, taskID) {
         if(taskOwner[0].owner != ownUsername) {
             let respone = {
                 "Result": "You are not the owner of this task!"
-            }
+            };
             res.json(respone);
             return false;
         } else {

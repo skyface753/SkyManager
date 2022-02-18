@@ -17,7 +17,7 @@ async function receiveMail(callback) {
             tls: imapOptions.tls,
             authTimeout: 3000
         }
-    }
+    };
     imaps.connect(config).then(function (connection) {
 
         return connection.openBox('INBOX').then(function () {
@@ -35,7 +35,7 @@ async function receiveMail(callback) {
                     console.log("No new mail");
                 }
                 messages.forEach(async function (item) {
-                    var all = _.find(item.parts, { "which": "" })
+                    var all = _.find(item.parts, { "which": "" });
                     var id = item.attributes.uid;
                     var idHeader = "Imap-Id: "+id+"\r\n";
                     simpleParser(idHeader+all.body, (err, mail) => {
@@ -67,4 +67,4 @@ async function createTicketFromMail(mail){
 
 module.exports = {
     receiveMail
-}
+};

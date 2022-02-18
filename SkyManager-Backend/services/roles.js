@@ -5,6 +5,6 @@ let RoleService = {
         const roles = await db.query("SELECT * FROM `rollen`");
         res.json(roles);
     },
-}
+};
 
 module.exports = RoleService;

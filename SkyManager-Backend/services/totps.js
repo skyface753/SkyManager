@@ -198,6 +198,6 @@ let totpService = {
             res.send('Imported');
         }
     }
-}
+};
 
 module.exports = totpService;

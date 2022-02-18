@@ -24,6 +24,6 @@ let PassesService = {
         res.setHeader('Content-Type', 'application/json');
         res.send("Edit Kundenpass: " + Titel);
     }
-}
+};
 
 module.exports = PassesService;

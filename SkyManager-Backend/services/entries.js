@@ -50,7 +50,7 @@ let EntryService = {
         res.setHeader('Content-Type', 'application/json');
         res.send("SendMail for Ticket #" + ticketID);
     },
-}
+};
 
 // async function isUserOwner(ticketEintragID, req)
 // {

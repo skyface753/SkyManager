@@ -78,7 +78,7 @@ let ticketsService = {
         res.send("Updated Ticket #" + ticketID);
     }
 
-}
+};
 
 function checkForEmtpyImput(...args) {
     for(var i = 0; i < args.length; i++) {

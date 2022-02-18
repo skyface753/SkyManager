@@ -45,6 +45,6 @@ let CustomerService = {
         res.setHeader('Content-Type', 'application/json');
         res.send("EditKunde" + kundenID);
     }
-}
+};
 
 module.exports = CustomerService;

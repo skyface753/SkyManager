@@ -5,6 +5,6 @@ let StateService = {
         const states = await db.query("SELECT * FROM `ticket_zustaende`");
         res.json(states);
     }
-}
+};
 
 module.exports = StateService;

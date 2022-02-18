@@ -90,7 +90,7 @@ const db = require('./db');
 const jwt = require("jsonwebtoken");
 const inputCheck = require('../helpers/inputCheck');
 // const jwtKey = "my_secret_key";
-const jwtExpirySeconds = 3000 
+const jwtExpirySeconds = 3000 ;
 const jwtExpirySeconds30Days = 2592000;
 const bcrypt = require('bcrypt');
 var authenticator = require('authenticator');
@@ -234,7 +234,7 @@ let userService = {
                     const token = signToken(usernameReturn, role_fkReturn, stayLoggedIn);
 
                     res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
-                    res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 })
+                    res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
                     await db.query("UPDATE `user` SET `LastLogin_Date` = CURRENT_DATE(), `LastLogin_Time` = CURRENT_TIME() WHERE `user`.`Name` = '" + usernameReturn + "'");
                     
 
@@ -247,7 +247,7 @@ let userService = {
                         frontendUrl: frontendUrl,
                         TOTPenabled: TOTPenabled,
                         backendVersion: backendVersion
-                    }
+                    };
                     res.send(returnJson);
                 }else{
                     res.clearCookie("token");
@@ -278,7 +278,7 @@ let userService = {
                 frontendUrl: frontendUrl,
                 TOTPenabled: TOTPenabled,
                 backendVersion: backendVersion
-            }
+            };
             res.send(returnJson);
         }else{
             res.status(400).send("AuthError");
@@ -286,9 +286,9 @@ let userService = {
     },
     refreshToken: async (req, res) => {
         var token = getToken(req);
-        var payload
+        var payload;
         try {
-            payload = jwt.verify(token, jwtKey)
+            payload = jwt.verify(token, jwtKey);
         } catch (e) {
             res.clearCookie("token");
             res.status(401);
@@ -298,10 +298,10 @@ let userService = {
         var stayLoggedIn = payload.stayLoggedIn;
         const newToken = signToken(payload.username, payload.role_fk, stayLoggedIn);
         res.header('Access-Control-Expose-Headers', 'Accept-Ranges, Content-Encoding, Content-Length, Content-Range, Set-Cookie');
-        res.cookie("token", newToken, { maxAge: jwtExpirySeconds * 1000 })
+        res.cookie("token", newToken, { maxAge: jwtExpirySeconds * 1000 });
         var returnJson = {
             token: newToken,
-        }
+        };
         res.send(returnJson);
     },
     createUser: async (req, res) => {
@@ -324,7 +324,7 @@ let userService = {
     },
     isLoggedIn: (req, res) => {
         var token = getToken(req);
-        var payload
+        var payload;
         try{
             payload = jwt.verify(token, jwtKey);
         }catch (e){
@@ -397,7 +397,7 @@ let userService = {
     }
     
         
-}
+};
 
 function getToken(req){
     var token = req.headers.authorization;
@@ -417,13 +417,13 @@ function signToken(username, role_fk, stayLoggedIn){
     const token = jwt.sign({ username, role_fk, stayLoggedIn }, jwtKey, {
         algorithm: "HS256",
         expiresIn: stayLoggedIn ? jwtExpirySeconds30Days : jwtExpirySeconds
-    })
+    });
     return token;
 }
 
 async function isUserAnAdmin  (req, res)   {
     var token = getToken(req);
-    var payload
+    var payload;
     try{
         payload = jwt.verify(token, jwtKey);
     }catch (e){
@@ -440,7 +440,7 @@ async function isUserAnAdmin  (req, res)   {
 
 function getUsernameFromToken(req, res){
     var token = getToken(req);
-    var payload
+    var payload;
     try{
         payload = jwt.verify(token, jwtKey);
     }catch (e){

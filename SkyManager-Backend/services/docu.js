@@ -1,20 +1,20 @@
-const multer=require('multer')
-const path= require('path')
+const multer=require('multer');
+const path= require('path');
 const db = require('./db.js');
 const userService = require('./users');
 
 
 var storage = multer.diskStorage({    
     destination: function (req, file, cb) {      
-    cb(null, 'uploads')    
+    cb(null, 'uploads');    
     }, 
        
     filename: function (req, file, cb) {      
-    cb(null, file.originalname + new Date().toISOString())    
+    cb(null, file.originalname + new Date().toISOString());    
     }  
-})
+});
 
-var upload = multer({ storage: storage })
+var upload = multer({ storage: storage });
 
 
 let DocuService = {
@@ -25,21 +25,21 @@ let DocuService = {
             } else if (err) {
                 console.log("Other Error: " + err);
             }
-        })
+        });
         const file = req.file;
         if(!file){
-            res.status(400).send("No file received")
+            res.status(400).send("No file received");
         }
         var username = await userService.getUsername(req, res);
         db.query("INSERT INTO docu (name, path, type, size, user_fk, customer_fk) VALUES (?, ?, ?, ?, ?, ?)", [file.originalname, file.path, file.mimetype, file.size, username, req.body.customerFK]);
-        res.status(200).send("File uploaded")
+        res.status(200).send("File uploaded");
     },
     getAll: async function(req, res){
         const username = await userService.getUsername(req, res);
         const docs = await db.query("SELECT * FROM docu");
         res.send(docs);
     }
-}
+};
 
 module.exports = DocuService;
   

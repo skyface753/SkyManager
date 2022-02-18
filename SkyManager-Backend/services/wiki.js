@@ -81,6 +81,6 @@ let WikiService = {
         res.setHeader('Content-Type', 'application/json');
         res.send("Delete Wiki #" + wikiID);
     }
-}
+};
 
 module.exports = WikiService;

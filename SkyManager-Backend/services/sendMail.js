@@ -4,20 +4,20 @@ const smtpOptions = config.smtpMail;
 const frontendURL = config.frontendURL;
 async function sendMail(recipient, subject, text, ticketID) {
     if(smtpOptions.host == ""){
-        console.log("No SMTP Host configured")
+        console.log("No SMTP Host configured");
         return;
     }
     if(recipient == "skymanager@example.de"){
-        console.log("No recipient configured")
+        console.log("No recipient configured");
         return;
     }
     try{
-        text += '\n\n<br><a href="https://open.skymanager.net?ticketID=' + ticketID + '">Open Ticket in APP</a>'
+        text += '\n\n<br><a href="https://open.skymanager.net?ticketID=' + ticketID + '">Open Ticket in APP</a>';
 
         // text += '\n\n<br><a href="https://skymanager.page.link?ticketID=' + ticketID + '">Open Ticket in Android-APP</a>'
         // text += '\n\n<br><a href="sky://manager?ticketID=' + ticketID + '">Open Ticket in IOS-APP</a>'
         if(frontendURL != null){
-            text += '<br><a href="' + frontendURL + '?ticketID=' + ticketID + '">Open Ticket in Web</a>'
+            text += '<br><a href="' + frontendURL + '?ticketID=' + ticketID + '">Open Ticket in Web</a>';
         }
         text += "\n\nTicket-ID: " + ticketID;
         text += "\n\nSkyManager-Team";
@@ -49,4 +49,4 @@ async function sendMail(recipient, subject, text, ticketID) {
     
 module.exports = {
     sendMail
-}
+};

@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken")
-
 function makeid(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -14,6 +12,6 @@ function makeid(length) {
 
 let jwtKeyObj = {
     jwtKey: makeid(15)
-}
+};
 
 module.exports = jwtKeyObj;

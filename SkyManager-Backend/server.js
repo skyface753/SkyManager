@@ -1,31 +1,26 @@
 const http = require('http');
 const express = require('express');
-const jwt = require("jsonwebtoken")
-const bodyParser = require("body-parser")
-const cookieParser = require("cookie-parser")
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const config = require('./config.js');
 const sslconfig = config.ssl;
-const fs = require('fs')
+const fs = require('fs');
 const port = 80;
 var app = express();
 const db = require('./services/db.js');
-const sendMail = require('./services/sendMail.js');
 
-const jwtKeyGenerator = require('./services/jwtKey');
-const jwtKey = jwtKeyGenerator.jwtKey;
-const jwtExpirySeconds = 3000
 
 
 
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(bodyParser.json())
-app.use(cookieParser())
+app.use(bodyParser.json());
+app.use(cookieParser());
 
-var cors = require('cors')
+var cors = require('cors');
 
-app.use(cors())
+app.use(cors());
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
@@ -64,8 +59,8 @@ if(config.showapidocs && config.showapidocs != "false"){
             }
           }
         }
-      }
-    }
+      };
+    };
 
   const options = {
     definition: {
@@ -122,22 +117,22 @@ if(config.showapidocs && config.showapidocs != "false"){
 // }
   
 
-const initDBHelper = require('./helpers/initDB')
+const initDBHelper = require('./helpers/initDB');
 var checkDBCounter = 0;
-checkTheDatabase()
+checkTheDatabase();
 async function checkTheDatabase(){
     try{
 
         var result = await db.query("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = '" + config.db.database + "' AND table_name = 'ticket_tickets');");
-        console.log(JSON.stringify(result))
-        result = result[0]["EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = '" + config.db.database + "' AND table_name = 'ticket_tickets')"]
-        console.log("DB Check: " + result)
+        console.log(JSON.stringify(result));
+        result = result[0]["EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = '" + config.db.database + "' AND table_name = 'ticket_tickets')"];
+        console.log("DB Check: " + result);
         if(result == 0){
             console.log("-----------------Init DB-----------");
             initDBHelper();
             console.log("-----------------Completed Init DB-----------");
         }else if(result == 1){
-            console.log("DB already initialized")
+            console.log("DB already initialized");
         }
         checkDBCounter = 0;
     }catch(error){
@@ -146,13 +141,13 @@ async function checkTheDatabase(){
         console.log("-----------------Completed Init DB ERROR-----------");
         if(checkDBCounter < 3){
             console.error("DB Check Error: " + error);
-            console.log("Retry DB Check")
+            console.log("Retry DB Check");
             setTimeout(function(){
                 checkDBCounter++;
                 checkTheDatabase();
             }, 5000);
         }else{
-            console.error("Cannot verify the Database")
+            console.error("Cannot verify the Database");
             process.exit(1);
         }
     }
@@ -176,46 +171,42 @@ app.use(function (req, res, next) {
         res.status(401);
         res.send("Auth Expired").end();
     }
-})
+});
 
 app.use('/uploads', express.static(__dirname +'/uploads'));
-const multer=require('multer')
-const path= require('path')
+const multer=require('multer');
+const path= require('path');
 
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads')
+      cb(null, 'uploads');
     },
     filename: function (req, file, cb) {
-      cb(null, new Date().toISOString() + file.originalname)
+      cb(null, new Date().toISOString() + file.originalname);
     }
-})
+});
 
-var upload = multer({ storage: storage })
+var upload = multer({ storage: storage });
 app.post('/upload', upload.single('myFile'), async(req, res, next) => {
-    const file = req.file
+    const file = req.file;
     if (!file) {
-        const error = new Error('Please upload a file')
-        error.httpStatusCode = 400
-    return next("hey error")
+        const error = new Error('Please upload a file');
+        error.httpStatusCode = 400;
+    return next("hey error");
     }
 
     var username = await UserService.getUsername(req, res);
         db.query("INSERT INTO docs (name, path, uploadedName, type, size, user_fk, customer_fk) VALUES (?, ?, ?, ?, ?, ?, ?)", [file.originalname, file.path, file.filename,file.mimetype, file.size, username, req.body.customer_fk]);
-        res.status(200).send("File uploaded")
+        res.status(200).send("File uploaded");
     
-  })
+  });
   app.post('/docs',async(req, res)=>{
       var customer_fk = req.body.customer_fk;
     const docs = await db.query("SELECT * FROM docs WHERE customer_fk = ?", [customer_fk]);
         res.send(docs);
     
-   })
-   
-   const { promisify } = require('util')
-
-const unlinkAsync = promisify(fs.unlink)
+   });
 
 app.post('/docs/delete',async(req, res)=>{
     var docID = req.body.docID;
@@ -230,7 +221,7 @@ app.post('/docs/delete',async(req, res)=>{
     // await unlinkAsync(docPath);
     res.send("File Deleted");
 
-})
+});
 
   
 
@@ -252,7 +243,7 @@ if(imapHost){
     }catch(e){
         console.log("Error while starting IMAP Mail Service: " + e);
     }
-}else{console.log("No IMAP Host - Diable IMAP Service")}
+}else{console.log("No IMAP Host - Diable IMAP Service");}
 
 const routes = require('./routes/routes');
 app.use('/', routes);
@@ -269,14 +260,14 @@ process.on('uncaughtException', function (err) {
 // SSL Config
 
 if(sslconfig.cert && sslconfig.key){
-    console.log("Start with SSL")
+    console.log("Start with SSL");
     const https = require('https');
     var privateKey = fs.readFileSync('sslcert/' + sslconfig.key, 'utf8');
     var certificate = fs.readFileSync('sslcert/' + sslconfig.cert, 'utf8');
     var credentials = { key: privateKey, cert: certificate };
     var httpsServer = https.createServer(credentials, app);
     httpsServer.listen(443);
-    console.log("Started with SSL - Port 443")
+    console.log("Started with SSL - Port 443");
 }
 // END SSL Config
 
