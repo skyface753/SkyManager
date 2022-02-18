@@ -1,0 +1,44 @@
+version: "3.2"
+services:
+  debug-backend:   # DEBUG
+    build:
+      context: SkyManager-Backend
+      target: dev
+    ports:
+      - 8451:80
+    environment:
+      DB_HOST: db
+      MYSQL_USER: userSkyManager
+      MYSQL_PASSWORD: "TestDBPass123"
+      MYSQL_DATABASE: SkyManager
+      MASTER_KEY: "MasterKeyTestPass123!!!"   # Enrcypt for Customer Passes
+      MODE: TEST   # SQL Output
+      SHOW_API_DOCS: 1
+      # SSL_KEY: "privateKey.key"
+      # SSL_CERT: "certificate.crt"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: SkyManager
+      MYSQL_USER: userSkyManager
+      MYSQL_PASSWORD: "TestDBPass123" 
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-uroot" , "-pexample" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      PMA_HOST: db
+    ports:
+      - 8084:80
+    restart: always
