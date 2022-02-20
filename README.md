@@ -1,7 +1,17 @@
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=docker%20build%20backend)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-frontend?label=docker%20build%20frontend)
-[![docker-backend build](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml)
-![Titelbild](https://github.com/skyface753/SkyManager/blob/main/Images/Icons/SkyManager-Titelbild-Without-Background.png)
+# Table of contents
+
+- [Setup](#setup)
+  - [Simple Setup](#simple-setup)
+  - [First Login](#first-login)
+- [SSL Setup](#ssl-setup)
+- [Environment Variables](#environment-variables)
+  - [SkyManager-Frontend](#skymanager-frontend)
+  - [Encryption](#encryption)
+- [Development](#development)
+  - [Debug](#debug)
+  - [Build for Prod MultiArch](#build-for-prod-multiarch)
+- [DEMO](#demo)
+- [Privacy Policy](https://skymanager.net/index.php/skymanager-privacy-policy/)
 
 # Setup
 
@@ -64,10 +74,10 @@ Password: SkyManager
 If you want to use SSL, you need to use an official SSL certificate. (Self-Signed Certificates are not allowed by Frontend)
    1. Copy the certificate and key into a folder like "ssl-certs"
    2. Add Volume to docker-compose.yml:
-      - "./ssl-certs:/usr/src/app/sslcert"
+      - `"./ssl-certs:/usr/src/app/sslcert"`
    3. Add these environment variables in the docker-compose.yml file:
-      1. SSL_CERT -> "Name of the certificate file.cert"
-      2. SSL_KEY -> "Name of the key file.key"
+      1. `SSL_CERT` -> `<Name of the certificate file.cert>`
+      2. `SSL_KEY` -> `<Name of the key file.key>`
   
 
 # Environment Variables
@@ -118,14 +128,14 @@ MASTER_KEY to encrypt the password of the customes.
 
 ## Build for Prod MultiArch
 #### Backend
-docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skymanager ./SkyManager-Backend
+`docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skymanager ./SkyManager-Backend`
 
 #### Frontend
-docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skymanager-frontend ./skymanager_flutter
+`docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skymanager-frontend ./skymanager_flutter`
 
 # DEMO
 Check out the [Demo](https://skymanager.skyface753.de)
-It recreates itself every 10 Minutes.
+It recreates itself every 10 minutes.
 
 
 # Feedback
@@ -133,9 +143,10 @@ Provide your feedback in the App (and Frontend) or create an Issue on [Github](h
 
 # Persistent Data
 SkyManager-Backend: 
+```
 /usr/src/app/uploads
 /usr/src/app/sslcert
-
+```
 # [Privacy Policy](https://skymanager.net/index.php/skymanager-privacy-policy/)
 
 
