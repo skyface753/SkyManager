@@ -1,3 +1,8 @@
+[![Buildx](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml)
+![Docker Backend Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=Docker%20Hub%20-%20Backend)
+![Docker Frontend Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-web?label=Docker%20Hub%20-%20Frontend)
+![Titelbild](https://github.com/skyface753/SkyManager/blob/main/Images/Icons/SkyManager-Titelbild-Without-Background.png)
+
 # Table of contents
 
 - [🔧 Setup](#-setup)
@@ -14,6 +19,8 @@
 - [💬 Feedback](#-feedback)
 - [💿 Persistent Data](#-persistent-data)
 - 👨‍💻 [Privacy Policy](#-privacy-policy)
+- [📚 License](#-license)
+- [📱 App](#-app)
 
 # 🔧 Setup
 
@@ -155,6 +162,13 @@ SkyManager-Backend:
 ```
 # 👨‍💻 [Privacy Policy](https://skymanager.net/index.php/skymanager-privacy-policy/)
 
+# 📚 [License](https://github.com/skyface753/SkyManager/blob/main/LICENSE)
+
+# 📱 App
+
+<a href='https://play.google.com/store/apps/details?id=de.skyface753.skymanager&hl=de&gl=US&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="200"/></a>
+
+#### The IOS-App is currently under review.
 
 <!-- # Android -->
 <!-- ![alt text](https://github.com/skyface753/SkyManager/blob/master/Images/Android-Screenshots/Login.jpg) -->
