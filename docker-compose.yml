@@ -5,20 +5,20 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./uploads:/usr/src/app/uploads
+      - ./uploads:/usr/src/app/uploads # Persistent Storage
     environment:
-      DB_HOST: db-service
+      DB_HOST: db-service                     
       MYSQL_USER: dbUser
       MYSQL_DATABASE: dbName
-      MYSQL_PASSWORD: dbPass
-      MASTER_KEY: MasterKey
+      MYSQL_PASSWORD: dbPass # ChangeME
+      MASTER_KEY: MasterKey # ChangeME
     restart: always
     depends_on:
       db-service:
         condition: service_healthy
 
-  skymanager-frontend:
-    image: skyface753/skymanager-frontend
+  skymanager-web:
+    image: skyface753/skymanager-web
     ports:
       - 80:80
     
@@ -28,10 +28,10 @@ services:
     volumes:
       - ./DB-Data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ROOTMYSQL
+      MYSQL_ROOT_PASSWORD: ROOTMYSQL # ChangeME
       MYSQL_DATABASE: dbName
       MYSQL_USER: dbUser
-      MYSQL_PASSWORD: dbPass
+      MYSQL_PASSWORD: dbPass # ChangeME
     healthcheck:
       test: ["CMD", "mysqladmin", "-uroot" , "-pROOTMYSQL" ,"ping", "-h", "localhost"]
       timeout: 5s

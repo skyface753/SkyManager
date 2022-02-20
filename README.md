@@ -44,8 +44,8 @@ services:
       db-service:
         condition: service_healthy
 
-  skymanager-frontend:
-    image: skyface753/skymanager-frontend
+  skymanager-web:
+    image: skyface753/skymanager-web
     ports:
       - 80:80
     

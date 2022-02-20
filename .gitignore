@@ -1,3 +1,4 @@
 SkyManager-Backend/node_modules/
 test-ssl/
 Db-Data/
+.DS_Store/
