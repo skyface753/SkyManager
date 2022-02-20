@@ -23,7 +23,7 @@
    1. MYSQL_PASSWORD (skymanager-backend and db-service)
    2. <span style="color:red">MASTERKEY (Don't change after first use) </span>
    3. MYSQL_ROOT_PASSWORD (in db Service and the Healthcheck)
-3.  Run "docker-compose up -d"
+3.  Run `docker-compose up -d`
 ```yaml
 version: "3.2"
 services:
@@ -76,7 +76,7 @@ Password: SkyManager
 If you want to use SSL, you need to use an official SSL certificate. (Self-Signed Certificates are not allowed by Frontend)
    1. Copy the certificate and key into a folder like "ssl-certs"
    2. Add Volume to docker-compose.yml:
-      - `"./ssl-certs:/usr/src/app/sslcert"`
+      - `./ssl-certs:/usr/src/app/sslcert`
    3. Add these environment variables in the docker-compose.yml file:
       1. `SSL_CERT` -> `<Name of the certificate file.cert>`
       2. `SSL_KEY` -> `<Name of the key file.key>`
@@ -138,6 +138,10 @@ MASTER_KEY to encrypt the password of the customes.
 # ▶️ DEMO
 Check out the [Demo](https://skymanager.skyface753.de)
 It recreates itself every 10 minutes.
+
+
+<img src="Images/IOS_Screenshots/11_Pro_Max/Home.png" alt="home" width="200" margin="10"/>|<img src="Images/IOS_Screenshots/11_Pro_Max/Create_Ticket.png" alt="home" width="200"/>
+<img src="Images/IOS_Screenshots/11_Pro_Max/Wiki Preview.png" alt="home" width="200" margin="10"/>|<img src="Images/IOS_Screenshots/11_Pro_Max/Customer_TOTP.png" alt="home" width="200"/>
 
 
 # 💬 Feedback
