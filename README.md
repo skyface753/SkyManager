@@ -1,4 +1,4 @@
-[![Buildx](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml)
+[![GitHub - Build](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml/badge.svg)](https://github.com/skyface753/SkyManager/actions/workflows/docker-build.yml)
 ![Docker Backend Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager?label=Docker%20Hub%20-%20Backend)
 ![Docker Frontend Build Status](https://img.shields.io/docker/cloud/build/skyface753/skymanager-web?label=Docker%20Hub%20-%20Frontend)
 ![Titelbild](https://github.com/skyface753/SkyManager/blob/main/Images/Icons/SkyManager-Titelbild-Without-Background.png)
