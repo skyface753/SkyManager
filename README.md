@@ -169,7 +169,7 @@ SkyManager-Backend:
 
 | Android | IOS |
 |:-:|:-:|
-| <a href='https://play.google.com/store/apps/details?id=de.skyface753.skymanager&hl=de&gl=US&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="200"/></a> | [<img src="Images/appstore-badge.png" width="200">](https://itunes.apple.com/us/app/jitsi-meet/id1165103905) |
+| <a href='https://play.google.com/store/apps/details?id=de.skyface753.skymanager&hl=de&gl=US&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="200"/></a> | [<img src="Images/appstore-badge.png" width="200">](https://apps.apple.com/us/app/skymanager/id1605499470) |
 
 <!-- # Android -->
 <!-- ![alt text](https://github.com/skyface753/SkyManager/blob/master/Images/Android-Screenshots/Login.jpg) -->
