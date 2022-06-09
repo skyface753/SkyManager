@@ -144,9 +144,12 @@ If you want to use SSL, you need to use an official SSL certificate. (Self-Signe
 `docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skymanager-frontend ./skymanager_flutter`
 
 # ▶️ DEMO
-Check out the [Demo](https://skymanager.skyface753.de)
+Check out the [Demo](https://demo.skymanager.net)
 It recreates itself every 10 minutes.
-
+  
+User: admin
+  
+Password: SkyManager
 
 <img src="Images/IOS_Screenshots/11_Pro_Max/Home.png" alt="home" width="200" margin="10"/>|<img src="Images/IOS_Screenshots/11_Pro_Max/Create_Ticket.png" alt="home" width="200"/>
 <img src="Images/IOS_Screenshots/11_Pro_Max/Wiki Preview.png" alt="home" width="200" margin="10"/>|<img src="Images/IOS_Screenshots/11_Pro_Max/Customer_TOTP.png" alt="home" width="200"/>
